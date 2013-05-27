@@ -7,8 +7,7 @@ Eventually it will be extended to have close to the functionality of Google Read
 
 Requirements:
 
-.NET 4.5
-An Azure Table Storage account
+.NET 4.5, an Azure Table Storage account
 
 Installation:
 
