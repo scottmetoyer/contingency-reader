@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+<div style="padding: 1em;">
+    <form method="post" action="Login">
+        <h2>Login</h2>
+        <table cellpadding="3" cellspacing="0" class="style1">
+            <tr>
+                <td align="right">Username :</td>
+                <td>
+                    <input name="Username" type="text" /></td>
+            </tr>
+            <tr>
+                <td align="right">Password :</td>
+                <td>
+                    <input name="Password" type="password" /></td>
+            </tr>
+            <tr>
+                <td align="right" colspan="2">
+                    <input id="btnSubmit" type="submit" value="Submit" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+
+                    @if (TempData["Error"] != null)
+                    {<strong style="color: red;">
+                            @TempData["Error"]</strong>
+                    }
+
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

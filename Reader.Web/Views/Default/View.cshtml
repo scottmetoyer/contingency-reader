@@ -1,0 +1,61 @@
+﻿@model Reader.Web.Models.FeedViewModel
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts
+{
+    <script type="text/javascript">
+        $("#toggle-add").click(function () {
+            $('#add-feed').toggle('fast');
+        });
+
+        $(".alert").delay(5000).fadeOut('slow');
+    </script>
+}
+<div id="nav">
+    <a href="#" class="button" id="toggle-add">Add feed</a>
+    <div id="add-feed" style="display: none;">
+        <span class="mini">Paste the feed URL and click add:</span>
+        @using (Html.BeginForm("AddFeed", "Default"))
+        {
+            <input type="text" name="url" />
+            <input type="submit" value="Add" />
+        }
+    </div>
+    <div id="feeds">
+        <ul>
+            @foreach (var feed in Model.Feeds)
+            {
+                
+            <li class="@(feed.URL == Model.SelectedFeed ? "selected": "")">
+                <a href="@Url.Action("View", new { feed = feed.URL })">
+                    <img src="@Url.Content("~/Images/rss_ico.png")" />&nbsp;@Server.UrlDecode(feed.DisplayName)</a></li>
+            }
+        </ul>
+    </div>
+</div>
+<div id="content">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert error">
+            @TempData["Error"]
+        </div>
+    }
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert message">
+            @TempData["Message"]
+        </div>
+    }
+        @foreach (var item in Model.Items)
+        {
+            <div class="item">
+                <h3><a href="@item.URL">@item.Title</a></h3>
+                <p class="date">@item.PublishDate</p>
+                @Html.Raw(item.Content)
+            </div>
+        }
+</div>
+<div class="clear">
+</div>

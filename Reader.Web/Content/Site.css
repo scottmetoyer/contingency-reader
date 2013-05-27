@@ -1,0 +1,247 @@
+﻿html, body
+{
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    font-size: .85em;
+    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    color: #232323;
+    background-color: #fff;
+}
+
+html *
+{
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+header, footer, nav, section
+{
+    display: block;
+}
+
+/* Styles for basic forms
+-----------------------------------------------------------*/
+fieldset
+{
+    border: 1px solid #ddd;
+    padding: 0 1.4em 1.4em 1.4em;
+    margin: 0 0 1.5em 0;
+}
+
+legend
+{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+textarea
+{
+    min-height: 75px;
+}
+
+.editor-label
+{
+    margin: 1em 0 0 0;
+}
+
+.editor-field
+{
+    margin: 0.5em 0 0 0;
+}
+
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error
+{
+    color: #f00;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #f00;
+    background-color: #fee;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #f00;
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+#header
+{
+    height: 80px;
+    width: 100%;
+    margin: 0 0 .5em 0;
+    background-color: #ddd;
+    border-bottom: solid 1px #686868;
+}
+
+#nav
+{
+    position: absolute;
+    top: 90px;
+    left: 0px;
+    width: 240px;
+    padding: .5em;
+    bottom: .5em;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#content
+{
+    padding: .5em;
+    overflow-y: scroll;
+    text-align: left;
+    position: fixed;
+    top: 90px;
+    left: 240px;
+    right: .5em;
+    bottom: .5em;
+    width: auto;
+}
+
+.clear
+{
+    clear: both;
+}
+
+.button
+{
+    padding: .4em 1em .4em 1em;
+    background-color: #ff6a00;
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+}
+
+#add-feed
+{
+    border: solid 1px #ececec;
+    padding: .5em;
+    margin-top: 1em;
+}
+
+.mini
+{
+    font-size: .85em;
+    color: #808080;
+}
+
+a img
+{
+    border: none;
+}
+
+#feeds
+{
+    margin-top: 1em;
+    height: auto;
+}
+
+    #feeds ul
+    {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    #feeds li
+    {
+        padding: .15em;
+    }
+
+        #feeds li a
+        {
+            width: 100%;
+            display: block;
+            color: #000;
+        }
+
+        #feeds li img
+        {
+            margin-top: 3px;
+        }
+
+        #feeds li:hover
+        {
+            background-color: #ececec;
+        }
+
+         #feeds li.selected
+        {
+            background-color: #FFCC66;
+        }
+
+    #feeds a
+    {
+        text-decoration: none;
+    }
+
+.alert
+{
+    font-weight: bold;
+    padding: .5em;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+.message
+{
+    border: solid 2px #005614;
+    background-color: #d9efd6;
+    color: #005614;
+}
+
+.error
+{
+    border: solid 2px #4d0808;
+    background-color: #e6cdcd;
+    color: #4d0808;
+}
+
+.item
+{
+    border: solid 1px #ececec;
+    padding: .75em;
+    margin-bottom: 2.0em;
+    padding-bottom: 1.5em;
+    overflow-x: hidden;
+}
+
+    .item h3
+    {
+        margin-top: .5em;
+        margin-bottom: 0;
+        font-size: 1.5em;
+    }
+
+        .item h3 a
+        {
+            text-decoration: none;
+        }
+
+.date
+{
+    color: #808080;
+    margin-bottom: 1.85em;
+    margin-top: 0;
+    font-size: .85em;
+}
