@@ -17,7 +17,7 @@ namespace Reader.Web.Controllers
         public DefaultController()
         {
             _repository = new Repository("StorageConnectionString");
-            _services = new FeedServices();
+            _services = new FeedServices(_repository);
         }
 
         public ActionResult View(string feed)
@@ -33,7 +33,7 @@ namespace Reader.Web.Controllers
                 {
                     try
                     {
-                        model.Items = _services.GetItems(Server.UrlDecode(feed));
+                        model.Items = _services.Fetch(Server.UrlDecode(feed));
                     }
                     catch (Exception ex)
                     {

@@ -11,6 +11,23 @@ namespace Reader.Domain
 {
     public class FeedServices
     {
+        public Repository _repository;
+
+        public FeedServices(Repository repository)
+        {
+            _repository = repository;
+        }
+
+        public void Refresh()
+        {
+            var feeds = _repository.GetFeeds();
+
+            foreach (var feed in feeds)
+            {
+                var items = this.Fetch(feed.URL);
+            }
+        }
+
         public bool ValidateUrl(string url)
         {
             bool valid = false;
@@ -51,11 +68,11 @@ namespace Reader.Domain
             return displayName;
         }
 
-        public List<Item> GetItems(string url)
+        public List<Item> Fetch(string feedUrl)
         {
             List<Item> items = new List<Item>();
 
-            XmlReader reader = XmlReader.Create(url);
+            XmlReader reader = XmlReader.Create(feedUrl);
             Rss20FeedFormatter formatter = new Rss20FeedFormatter();
             formatter.ReadFrom(reader);
             reader.Close();
@@ -66,7 +83,9 @@ namespace Reader.Domain
                 Item item = new Item();
                 item.Title = (i.Title != null) ? i.Title.Text : i.BaseUri.ToString();
                 item.PublishDate = (i.PublishDate != null) ? i.PublishDate.ToString("r") : string.Empty;
-                item.URL = url;
+                
+                var link = i.Links.FirstOrDefault(x => x.RelationshipType == "alternate");
+                item.URL = (link != null) ? link.Uri.ToString() : feedUrl;
 
                 if (i.Content != null)
                 {
