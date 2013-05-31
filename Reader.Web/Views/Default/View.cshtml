@@ -27,10 +27,9 @@
         <ul>
             @foreach (var feed in Model.Feeds)
             {
-                
-            <li class="@(feed.URL == Model.SelectedFeed ? "selected": "")">
-                <a href="@Url.Action("View", new { feed = feed.URL })">
-                    <img src="@Url.Content("~/Images/rss_ico.png")" />&nbsp;@Server.UrlDecode(feed.DisplayName)</a></li>
+                <li class="@(feed.URL == Model.SelectedFeedURL ? "selected" : "")">
+                    <a href="@Url.Action("View", new { feed = feed.URL })">
+                        <img src="@Url.Content("~/Images/rss_ico.png")" />&nbsp;@Server.UrlDecode(feed.DisplayName)</a></li>
             }
         </ul>
     </div>
@@ -48,14 +47,14 @@
             @TempData["Message"]
         </div>
     }
-        @foreach (var item in Model.Items)
-        {
-            <div class="item">
-                <h3><a href="@item.URL">@item.Title</a></h3>
-                <p class="date">@item.PublishDate</p>
-                @Html.Raw(item.Content)
-            </div>
-        }
+    @foreach (var item in Model.Items)
+    {
+        <div class="item">
+            <h3><a href="@(Server.UrlDecode(item.URL))">@item.Title</a></h3>
+            <p class="date">@(item.PublishDate.HasValue ? item.PublishDate.Value.ToString() : string.Empty)</p>
+            @Html.Raw(item.Content)
+        </div>
+    }
 </div>
 <div class="clear">
 </div>

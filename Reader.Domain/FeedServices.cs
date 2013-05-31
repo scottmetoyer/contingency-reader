@@ -6,26 +6,24 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.ServiceModel.Syndication;
 using System.Xml.Linq;
+using System.Web;
 
 namespace Reader.Domain
 {
     public class FeedServices
     {
-        public Repository _repository;
-
-        public FeedServices(Repository repository)
+        public class RefreshResult
         {
-            _repository = repository;
+            public bool Success { get; set; }
+
+            public string ErrorMessage { get; set; }
         }
 
-        public void Refresh()
-        {
-            var feeds = _repository.GetFeeds();
+        public FeedRepository _repository;
 
-            foreach (var feed in feeds)
-            {
-                var items = this.Fetch(feed.URL);
-            }
+        public FeedServices(FeedRepository repository)
+        {
+            _repository = repository;
         }
 
         public bool ValidateUrl(string url)
@@ -68,11 +66,11 @@ namespace Reader.Domain
             return displayName;
         }
 
-        public List<Item> Fetch(string feedUrl)
+        public void Fetch(Feed feed)
         {
             List<Item> items = new List<Item>();
 
-            XmlReader reader = XmlReader.Create(feedUrl);
+            XmlReader reader = XmlReader.Create(HttpUtility.UrlDecode(feed.URL));
             Rss20FeedFormatter formatter = new Rss20FeedFormatter();
             formatter.ReadFrom(reader);
             reader.Close();
@@ -80,42 +78,59 @@ namespace Reader.Domain
 
             foreach (var i in syndicationItems)
             {
-                Item item = new Item();
-                item.Title = (i.Title != null) ? i.Title.Text : i.BaseUri.ToString();
-                item.PublishDate = (i.PublishDate != null) ? i.PublishDate.ToString("r") : string.Empty;
-                
+                // An article link is required... this is how we uniquely identify articles.
                 var link = i.Links.FirstOrDefault(x => x.RelationshipType == "alternate");
-                item.URL = (link != null) ? link.Uri.ToString() : feedUrl;
-
-                if (i.Content != null)
+                if (link == null)
                 {
-                    item.Content = i.Content.ToString();
+                    continue;
                 }
-                else
+
+                string itemUrl = (HttpUtility.UrlEncode(link.Uri.ToString()));
+
+                // Check if we've already saved this item
+                var item = _repository.Items.FirstOrDefault(x => x.URL == itemUrl);
+
+                if (item == null)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    foreach (SyndicationElementExtension extension in i.ElementExtensions)
+                    item = new Item { ItemID = 0 };
+                    item.FeedID = feed.FeedID;
+                    item.URL = itemUrl;
+                    item.IsStarred = false;
+                    item.IsRead = false;
+                    item.Title = (i.Title != null) ? i.Title.Text : "No title";
+
+                    if (i.PublishDate != null)
+                        item.PublishDate = i.PublishDate.DateTime;
+
+                    if (i.Content != null)
                     {
-                        XElement e = extension.GetObject<XElement>();
-                        if (e.Name.LocalName == "encoded" && e.Name.Namespace.ToString().Contains("content"))
+                        item.Content = i.Content.ToString();
+                    }
+                    else
+                    {
+                        // The content may be encoded. Go find the encoded content XML node and get the content.
+                        StringBuilder sb = new StringBuilder();
+                        foreach (SyndicationElementExtension extension in i.ElementExtensions)
                         {
-                            sb.Append(e.Value);
+                            XElement e = extension.GetObject<XElement>();
+                            if (e.Name.LocalName == "encoded" && e.Name.Namespace.ToString().Contains("content"))
+                            {
+                                sb.Append(e.Value);
+                            }
                         }
+
+                        item.Content = sb.ToString();
                     }
 
-                    item.Content = sb.ToString();
-                }
+                    // Last resort, use the summary
+                    if (item.Content == string.Empty && i.Summary != null)
+                    {
+                        item.Content = i.Summary.Text;
+                    }
 
-                // No content? Use the summary.
-                if (item.Content == string.Empty && i.Summary != null)
-                {
-                    item.Content = i.Summary.Text;
+                    _repository.SaveItem(item);
                 }
-
-                items.Add(item);
             }
-
-            return items;
         }
     }
 }

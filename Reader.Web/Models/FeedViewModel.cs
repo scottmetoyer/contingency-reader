@@ -9,7 +9,7 @@ namespace Reader.Web.Models
 {
     public class FeedViewModel
     {
-        public string SelectedFeed = string.Empty;
+        public string SelectedFeedURL { get; set; }
 
         public List<Feed> Feeds { get; set; }
 

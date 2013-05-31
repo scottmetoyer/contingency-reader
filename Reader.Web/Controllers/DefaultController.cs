@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Reader.Domain;
+using Reader.Domain.Configuration;
 using Reader.Web.Models;
 
 namespace Reader.Web.Controllers
@@ -11,12 +12,13 @@ namespace Reader.Web.Controllers
     [Authorize]
     public class DefaultController : Controller
     {
-        private Repository _repository;
+        private FeedRepository _repository;
         private FeedServices _services;
 
         public DefaultController()
         {
-            _repository = new Repository("StorageConnectionString");
+            UserSettingsSection config = (UserSettingsSection)System.Configuration.ConfigurationManager.GetSection("userSettings");
+            _repository = new FeedRepository(config.ConnectionString.Value);
             _services = new FeedServices(_repository);
         }
 
@@ -26,14 +28,16 @@ namespace Reader.Web.Controllers
 
             try
             {
-                model.Feeds = _repository.GetFeeds();
-                model.SelectedFeed = feed;
+                model.Feeds = _repository.Feeds.ToList();
 
-                if (!string.IsNullOrEmpty(feed))
+                var selectedFeed = _repository.Feeds.FirstOrDefault(x => x.URL == feed);
+                model.SelectedFeedURL = selectedFeed != null ? selectedFeed.URL : string.Empty;
+
+                if (selectedFeed != null)
                 {
                     try
                     {
-                        model.Items = _services.Fetch(Server.UrlDecode(feed));
+                        model.Items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID).ToList();
                     }
                     catch (Exception ex)
                     {
@@ -65,9 +69,11 @@ namespace Reader.Web.Controllers
             {
                 try
                 {
-                    var feed = new Feed(Server.UrlEncode(url));
-                    feed.DisplayName = Server.UrlEncode(_services.GetDisplayName(url));
+                    var feed = new Feed { FeedID = 0 };
+                    feed.URL = Server.UrlEncode(url);
+                    feed.DisplayName = _services.GetDisplayName(url);
                     _repository.SaveFeed(feed);
+
                     TempData["Message"] = "Feed added";
                 }
                 catch (Exception ex)
@@ -78,21 +84,5 @@ namespace Reader.Web.Controllers
 
             return RedirectToAction("View");
         }
-
-        [Authorize]
-        public ActionResult DeleteFeeds()
-        {
-            try
-            {
-                _repository.DropTable();
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = ex.Message.ToString();
-            }
-
-            return RedirectToAction("View");
-        }
-
     }
 }
