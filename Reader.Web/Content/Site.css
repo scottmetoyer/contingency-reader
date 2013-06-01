@@ -99,8 +99,9 @@ textarea
     position: absolute;
     top: 90px;
     left: 0px;
-    width: 240px;
+    width: 235px;
     padding: .5em;
+    padding-right: 0;
     bottom: .5em;
     overflow-y: auto;
     overflow-x: hidden;
@@ -185,9 +186,9 @@ a img
             background-color: #ececec;
         }
 
-         #feeds li.selected
+        #feeds li.selected
         {
-            background-color: #FFCC66;
+            border-right: solid 4px #0026ff;
         }
 
     #feeds a

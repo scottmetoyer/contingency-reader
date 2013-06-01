@@ -34,5 +34,8 @@ namespace Reader.Domain
 
         [Column]
         public bool IsStarred { get; set; }
+
+        [Column]
+        public DateTime FetchDate { get; set; }
     }
 }

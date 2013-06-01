@@ -85,7 +85,7 @@ namespace Reader.Domain
                     continue;
                 }
 
-                string itemUrl = (HttpUtility.UrlEncode(link.Uri.ToString()));
+                string itemUrl = (link.Uri.ToString());
 
                 // Check if we've already saved this item
                 var item = _repository.Items.FirstOrDefault(x => x.URL == itemUrl);
@@ -98,6 +98,7 @@ namespace Reader.Domain
                     item.IsStarred = false;
                     item.IsRead = false;
                     item.Title = (i.Title != null) ? i.Title.Text : "No title";
+                    item.FetchDate = DateTime.Now;
 
                     if (i.PublishDate != null)
                         item.PublishDate = i.PublishDate.DateTime;

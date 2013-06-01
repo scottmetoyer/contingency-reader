@@ -70,7 +70,7 @@ namespace Reader.Web.Controllers
                 try
                 {
                     var feed = new Feed { FeedID = 0 };
-                    feed.URL = Server.UrlEncode(url);
+                    feed.URL = url;
                     feed.DisplayName = _services.GetDisplayName(url);
                     _repository.SaveFeed(feed);
 

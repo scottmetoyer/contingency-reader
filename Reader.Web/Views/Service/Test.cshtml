@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "Test";
+}
+@section scripts
+{
+    <script type="text/javascript">
+        $(".alert").delay(5000).fadeOut('slow');
+    </script>
+}
+<style type="text/css">
+    h3
+    {
+        border-bottom: solid 1px #ececec;
+    }
+
+    ul
+    {
+        list-style-type: none;
+    }
+
+    .container
+    {
+        padding: 10px;
+    }
+</style>
+<div class="container">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert error">
+            @TempData["Error"]
+        </div>
+    }
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert message">
+            @TempData["Message"]
+        </div>
+    }
+    <h2>Service Test</h2>
+    <h3>Feeds</h3>
+    <ul>
+        @foreach (var f in (List<Reader.Domain.Feed>)ViewData["Feeds"])
+        {
+            <li>@Server.UrlEncode(f.URL)</li>
+        }
+    </ul>
+    <h3>Refresh Test</h3>
+    @using (Html.BeginForm("TestRefresh", "Service"))
+    {
+        <label for="url">Feed URL</label>
+        <input type="text" name="url" /><br />
+        <input type="submit" value="Test Refresh" /><br />
+    }
+    <h3>Get Feeds Test</h3>
+    <a href="@Url.Action("GetFeeds")">Get Feeds</a>
+</div>

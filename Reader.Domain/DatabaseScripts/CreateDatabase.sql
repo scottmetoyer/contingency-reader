@@ -148,6 +148,7 @@ CREATE TABLE [dbo].[Items](
 	[Url] [nvarchar](250) NOT NULL,
 	[IsRead] [bit] NOT NULL,
 	[isStarred] [bit] NOT NULL,
+	[FetchDate] DATETIME NOT NULL, 
 PRIMARY KEY CLUSTERED 
 (
 	[ItemID] ASC
@@ -155,3 +156,4 @@ PRIMARY KEY CLUSTERED
 )
 
 GO
+
