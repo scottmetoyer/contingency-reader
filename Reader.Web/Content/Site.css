@@ -128,7 +128,7 @@ textarea
 .button
 {
     padding: .4em 1em .4em 1em;
-    background-color: #ff6a00;
+    background-color: #D34A32;
     text-decoration: none;
     font-weight: bold;
     color: #fff;
@@ -166,7 +166,9 @@ a img
 
     #feeds li
     {
-        padding: .15em;
+        vertical-align: middle;
+        margin-bottom: 2px;
+        line-height: 21px;
     }
 
         #feeds li a
@@ -176,20 +178,27 @@ a img
             color: #000;
         }
 
-        #feeds li img
+        #feeds li div.favicon
         {
-            margin-top: 3px;
+            float: left;
+            margin-right: 4px;
         }
 
-        #feeds li:hover
-        {
-            background-color: #ececec;
-        }
+    #feeds img
+    {
+        margin-top: 2px;
+    }
 
-        #feeds li.selected
-        {
-            border-right: solid 4px #0026ff;
-        }
+    #feeds li:hover
+    {
+        background-color: #ececec;
+    }
+
+    #feeds li.selected a
+    {
+        color: #D34A32;
+        font-weight: bold;
+    }
 
     #feeds a
     {

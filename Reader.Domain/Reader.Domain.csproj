@@ -67,7 +67,6 @@
     <Compile Include="Configuration\UserSettingsSection.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Artifacts\subscriptions.xml" />
     <Content Include="DatabaseScripts\CreateDatabase.sql" />
   </ItemGroup>
   <ItemGroup>

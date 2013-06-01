@@ -29,7 +29,7 @@
             {
                 <li class="@(feed.URL == Model.SelectedFeedURL ? "selected" : "")">
                     <a href="@Url.Action("View", new { feed = feed.URL })">
-                        <img src="@Url.Content("~/Images/rss_ico.png")" />&nbsp;@Server.UrlDecode(feed.DisplayName)</a></li>
+                        <div class="favicon"><img src="@Url.Content("~/Images/rss_ico.png")" /></div><div class="name">@Server.UrlDecode(feed.DisplayName)</div></a></li>
             }
         </ul>
     </div>
