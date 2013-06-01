@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Xml.Serialization;
 using Reader.Domain;
 using Reader.Domain.Configuration;
 
@@ -37,7 +38,7 @@ namespace Reader.Web.Controllers
             return feed;
         }
 
-        public HttpResponseMessage Refresh(int id)
+        public HttpResponseMessage Refresh([FromBody]int id)
         {
             bool success = false;
 

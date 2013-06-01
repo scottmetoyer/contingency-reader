@@ -11,6 +11,19 @@ namespace Reader.Domain.Configuration
 {
     public class UserSettingsSection : ConfigurationSection
     {
+        [ConfigurationProperty("serviceUrl")]
+        public ServiceUrlElement ServiceUrl
+        {
+            get
+            {
+                return (ServiceUrlElement)this["serviceUrl"];
+            }
+            set
+            {
+                this["serviceUrl"] = value;
+            }
+        }
+
         [ConfigurationProperty("account")]
         public AccountElement Account
         {
@@ -67,6 +80,22 @@ namespace Reader.Domain.Configuration
         }
 
         public class ConnectionStringElement : ConfigurationElement
+        {
+            [ConfigurationProperty("value", IsRequired = true)]
+            public string Value
+            {
+                get
+                {
+                    return (string)this["value"];
+                }
+                set
+                {
+                    this["value"] = value;
+                }
+            }
+        }
+
+        public class ServiceUrlElement : ConfigurationElement
         {
             [ConfigurationProperty("value", IsRequired = true)]
             public string Value
