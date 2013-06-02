@@ -9,7 +9,7 @@
 body
 {
     font-size: .85em;
-    font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+    font-family: "Arial", Sans-Serif;
     color: #232323;
     background-color: #fff;
 }
@@ -113,12 +113,37 @@ textarea
     overflow-y: scroll;
     text-align: left;
     position: fixed;
-    top: 90px;
+    top: 125px;
     left: 240px;
     right: .5em;
     bottom: .5em;
     width: auto;
+    padding-bottom: 200px;
+    padding-top: 0;
 }
+
+#feed-controls
+{
+    position: fixed;
+    padding: 6px;
+    width: auto;
+    left: 240px;
+    top: 84px;
+}
+
+    #feed-controls div
+    {
+        float: left;
+        margin-right: 5px;
+    }
+
+    #feed-controls .feed-name
+    {
+        margin-top: 5px;
+        font-weight: bold;
+        font-size: 15px;
+        margin-right: 30px;
+    }
 
 .clear
 {
@@ -131,14 +156,23 @@ textarea
     background-color: #D34A32;
     text-decoration: none;
     font-weight: bold;
+    font-size: 13px;
     color: #fff;
+    cursor: pointer;
+}
+
+.gray
+{
+    background-color: #BFBFBF;
+    color: #EFEFEF;
+    border: 0;
 }
 
 #add-feed
 {
     border: solid 1px #ececec;
     padding: .5em;
-    margin-top: 1em;
+    margin-top: 8px;
 }
 
 .mini
@@ -156,6 +190,7 @@ a img
 {
     margin-top: 1em;
     height: auto;
+    text-align: left;
 }
 
     #feeds ul
@@ -166,9 +201,8 @@ a img
 
     #feeds li
     {
-        vertical-align: middle;
-        margin-bottom: 2px;
-        line-height: 21px;
+        font-size: 13px;
+        padding-top: 2px;
     }
 
         #feeds li a
@@ -186,7 +220,22 @@ a img
 
     #feeds img
     {
-        margin-top: 2px;
+        margin-top: 1px;
+    }
+
+    #feeds .name
+    {
+        float: left;
+        margin-right: 4px;
+        padding-top: 2px;
+    }
+
+    #feeds .unread-count
+    {
+        color: #666;
+        font-size: 11px;
+        font-weight: normal;
+        padding-top: 4px;
     }
 
     #feeds li:hover
@@ -240,13 +289,18 @@ a img
     {
         margin-top: .5em;
         margin-bottom: 0;
-        font-size: 1.5em;
+        font-size: 1.3em;
     }
 
         .item h3 a
         {
             text-decoration: none;
         }
+
+.selected-item
+{
+    border-left: solid 1px blue;
+}
 
 .date
 {

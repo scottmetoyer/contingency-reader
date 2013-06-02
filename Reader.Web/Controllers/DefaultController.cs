@@ -24,14 +24,21 @@ namespace Reader.Web.Controllers
 
         public ActionResult View(string feed)
         {
-            var model = new FeedViewModel();
+            var model = new ItemsViewModel();
 
             try
             {
-                model.Feeds = _repository.Feeds.ToList();
+                var feeds = _repository.Feeds.ToList();
+                foreach (var f in feeds)
+                {
+                    var feedViewModel = new FeedViewModel { Feed = f };
+                    feedViewModel.UnreadCount = _repository.Items.Count(x => x.FeedID == f.FeedID && x.IsRead == false);
+                    model.Feeds.Add(feedViewModel);
+                }
 
                 var selectedFeed = _repository.Feeds.FirstOrDefault(x => x.URL == feed);
                 model.SelectedFeedURL = selectedFeed != null ? selectedFeed.URL : string.Empty;
+                model.SelectedFeedName = selectedFeed != null ? selectedFeed.DisplayName : string.Empty;
 
                 if (selectedFeed != null)
                 {

@@ -24,14 +24,12 @@ namespace Reader.Web
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
-                      "~/Scripts/jquery.mousewheel.js",
-                      "~/Scripts/mwheelIntent.js",
-                      "~/Scripts/jquery.jscrollpane*"
+                      "~/Scripts/waypoints*",
+                      "~/Scripts/jquery.scrollTo-*"
                       ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/site.css",
-                "~/Content/jquery.jscrollpane.css"
+                "~/Content/site.css"
                 ));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
