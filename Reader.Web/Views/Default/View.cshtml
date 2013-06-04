@@ -6,42 +6,86 @@
 @section scripts
 {
     <script type="text/javascript">
+        // Add all the item ids to a JavaScript array so we can hotkey page through them
+        var itemIdArray = [];
+        var activeItemId = 0;
+
+        @foreach (var i in Model.Items.Where(x => x.IsRead == false).ToList())
+        {
+            <text>itemIdArray.push(</text>@i.ItemID<text>);</text>
+        }
+
         $(document).ready(function () {
             $('.item').click(function (e) {
                 $('#content').scrollTo(this);
                 setActiveItem($(this));
             });
-        });
 
-        $("#toggle-add").click(function () {
-            $('#add-feed').toggle('fast');
-        });
+            $(document).keypress(function (event) {
+                if (itemIdArray.length == 0) {
+                    return;
+                }
 
-        $(".alert").delay(5000).fadeOut('slow');
+                if (event.which == 106 || event.which == 107) {
+                    currentIndex = jQuery.inArray(activeItemId, itemIdArray);
+
+                    if (currentIndex == -1) {
+                        activeItemId = itemIdArray[0];
+                    } else {
+                        if (event.which == 106) {
+                            currentIndex = currentIndex + 1;
+                        } else if (event.which == 107) {
+                            currentIndex = currentIndex - 1;
+                        }
+
+                        // Check bounds
+                        if (currentIndex >= itemIdArray.length) {
+                            activeItemId = itemIdArray[itemIdArray.length - 1];
+                        } else if (currentIndex <= 0) {
+                            activeItemId = itemIdArray[0];
+                        } else {
+                            activeItemId = itemIdArray[currentIndex];
+                        }
+                    }
+
+                    var item = $("div.item-id-" + activeItemId);
+                    $('#content').scrollTo(item);
+                    setActiveItem($(item));
+                }
+            });
+
+            $("#toggle-add").click(function () {
+                $('#add-feed').toggle('fast');
+            });
+
+            $(".alert").delay(5000).fadeOut('slow');
+        });
 
         function setActiveItem(item) {
-            // An item is in view, set it as selected and mark it read
+            activeItemId = parseInt(item.children("input[name='item-id']").val(), 10);
+
+            // Side the active item border styling
             $('.item').removeClass('selected-item');
             item.addClass('selected-item');
 
+            // Post to the 'set read' web service
             if (item.children("input[name='is-read']").val() != "read") {
                 $.post(
                     'api/items/read',
                     "=" + item.children("input[name='item-id']").val(),
                     function (data) {
-                        // Mark the item read
+                        // Set the item's hidden input read indicator
                         item.children("input[name='is-read']").val("read");
 
-                        // Decrement read counter
+                        // Decrement the unread counter
                         unreadCountElement = $('li.selected-feed').find('.unread-count');
                         unreadCount = parseInt(unreadCountElement.text().replace("(", "").replace(")", ""), 10) - 1;
                         unreadCountElement.text("(" + unreadCount + ")");
 
-                        if (unreadCount == 0) {
-                            unreadCountElement.hide();
+                        if (unreadCount == 0 || isNaN(unreadCount)) {
+                            unreadCountElement.html("&nbsp;");
                         }
                     });
-                
             }
         }
     </script>
@@ -66,7 +110,7 @@
                             <img height="16" width="16" src="@Url.Content("~/Images/rss_ico.png")" />
                         </div>
                         <div class="name">@Server.UrlDecode(feed.Feed.DisplayName)</div>
-                        <div class="unread-count" style="@(feed.UnreadCount == 0 ? "display: none;": "" )">(@feed.UnreadCount.ToString())</div>
+                        <div class="unread-count">@(feed.UnreadCount == 0 ? "" : "(" + feed.UnreadCount.ToString() + ")")&nbsp;</div>
                     </a>
                     <div style="clear: both;"></div>
                 </li>
@@ -107,7 +151,7 @@
     {
         if (!item.IsRead)
         {
-        <div class="item">
+        <div class="item item-id-@item.ItemID.ToString()">
             <input type="hidden" name="item-id" value="@item.ItemID" />
             <input type="hidden" name="is-read" value="@(item.IsRead ? "read" : "")" />
             <input type="hidden" name="is-starred" value="@(item.IsStarred ? "starred" : "")" />
