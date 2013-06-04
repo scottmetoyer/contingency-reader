@@ -21,7 +21,7 @@ namespace Reader.Web.Controllers
             _services = new FeedServices(_repository);
         }
 
-        public HttpResponseMessage SetRead([FromBody]int id)
+        public HttpResponseMessage Read([FromBody]int id)
         {
             bool success = false;
 

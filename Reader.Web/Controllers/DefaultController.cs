@@ -34,17 +34,18 @@ namespace Reader.Web.Controllers
                     var feedViewModel = new FeedViewModel { Feed = f };
                     feedViewModel.UnreadCount = _repository.Items.Count(x => x.FeedID == f.FeedID && x.IsRead == false);
                     model.Feeds.Add(feedViewModel);
+
+                    if (f.URL == feed)
+                    {
+                        model.SelectedFeed = feedViewModel;
+                    }
                 }
 
-                var selectedFeed = _repository.Feeds.FirstOrDefault(x => x.URL == feed);
-                model.SelectedFeedURL = selectedFeed != null ? selectedFeed.URL : string.Empty;
-                model.SelectedFeedName = selectedFeed != null ? selectedFeed.DisplayName : string.Empty;
-
-                if (selectedFeed != null)
+                if (model.SelectedFeed.Feed.URL != string.Empty)
                 {
                     try
                     {
-                        model.Items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID).ToList();
+                        model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID).ToList();
                     }
                     catch (Exception ex)
                     {

@@ -9,9 +9,7 @@ namespace Reader.Web.Models
 {
     public class ItemsViewModel
     {
-        public string SelectedFeedURL { get; set; }
-
-        public string SelectedFeedName { get; set; }
+        public FeedViewModel SelectedFeed { get; set; }
 
         public List<FeedViewModel> Feeds { get; set; }
 
@@ -21,6 +19,7 @@ namespace Reader.Web.Models
         {
             this.Feeds = new List<FeedViewModel>();
             this.Items = new List<Item>();
+            this.SelectedFeed = new FeedViewModel { UnreadCount = 0};
         }
     }
 }

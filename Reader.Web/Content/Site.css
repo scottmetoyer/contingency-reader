@@ -243,7 +243,7 @@ a img
         background-color: #ececec;
     }
 
-    #feeds li.selected a
+    #feeds li.selected-feed a
     {
         color: #D34A32;
         font-weight: bold;
