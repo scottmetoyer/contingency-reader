@@ -21,6 +21,20 @@
                 setActiveItem($(this));
             });
 
+            $('.star').click(function (e) {
+                var imagePath = $(this).attr('src');
+
+                if (imagePath.indexOf('star.png') >= 0) {
+                    $(this).attr('src', '@Url.Content("~/Images/star_lit.png")');
+                    $.post('api/items/setStar', "=" + $(this).attr("alt"));
+                } else {
+                    $(this).attr('src', '@Url.Content("~/Images/star.png")');
+                    $.post('api/items/removeStar', "=" + $(this).attr("alt"));
+                }
+
+                event.stopPropagation();
+            });
+
             $(document).keypress(function (event) {
                 if (itemIdArray.length == 0) {
                     return;
@@ -79,12 +93,18 @@
 
                         // Decrement the unread counter
                         unreadCountElement = $('li.selected-feed').find('.unread-count');
-                        unreadCount = parseInt(unreadCountElement.text().replace("(", "").replace(")", ""), 10) - 1;
-                        unreadCountElement.text("(" + unreadCount + ")");
 
-                        if (unreadCount == 0 || isNaN(unreadCount)) {
-                            unreadCountElement.html("&nbsp;");
+                        if (unreadCountElement) {
+                            unreadCount = parseInt(unreadCountElement.text().replace("(", "").replace(")", ""), 10) - 1;
+                            unreadCountElement.text("(" + unreadCount + ")");
+
+                            if (unreadCount == 0 || isNaN(unreadCount)) {
+                                unreadCountElement.html("&nbsp;");
+                            }
                         }
+
+                        // Hide the new item icon
+                        $('.read-icon-' + activeItemId).fadeOut('fast');
                     });
             }
         }
@@ -115,25 +135,42 @@
                     <div style="clear: both;"></div>
                 </li>
             }
+            <li style="border-bottom: 1px solid #ebebeb; margin-top: 10px; margin-bottom: 10px;"></li>
+            <li class="@(Model.SelectedFeed.Feed.URL == "starred" ? "selected-feed" : "")">
+                <a href="@Url.Action("View", new { feed = "starred" })">
+                    <div class="favicon">
+                        <img height="16" width="16" src="@Url.Content("~/Images/darkstar.png")" />
+                    </div>
+                    <div class="name">Starred Items</div>
+                    <div class="unread-count">&nbsp;</div>
+                </a>
+                <div style="clear: both;"></div>
+
+            </li>
         </ul>
     </div>
 </div>
-@if (Model.SelectedFeed.Feed.URL != string.Empty && Model.SelectedFeed.UnreadCount > 0)
+@if (Model.SelectedFeed.Feed.URL != string.Empty)
 {
     <div id="feed-controls">
         <div class="feed-name">@Model.SelectedFeed.Feed.DisplayName</div>
-        <div>
-            <input type="submit" class="button gray" value="Refresh" name="refresh-button" />
-        </div>
-        <div>
-            <input type="submit" class="button gray" value="Mark All Read" name="markread-button" />
-        </div>
-        <div>
-            <input type="submit" class="button gray" value="Unsubscribe" name="unsubscribe-button" />
-        </div>
+
+        @if (Model.SelectedFeed.UnreadCount > 0)
+        {
+            <div>
+                <input type="submit" class="button gray" value="Refresh" name="refresh-button" />
+            </div>
+            <div>
+                <input type="submit" class="button gray" value="Mark All Read" name="markread-button" />
+            </div>
+            <div>
+                <input type="submit" class="button gray" value="Unsubscribe" name="unsubscribe-button" />
+            </div>
+        }
         <div style="clear: both;"></div>
     </div>
 }
+
 <div id="content">
     @if (TempData["Error"] != null)
     {
@@ -149,17 +186,39 @@
     }
     @foreach (var item in Model.Items)
     {
-        if (!item.IsRead)
-        {
         <div class="item item-id-@item.ItemID.ToString()">
             <input type="hidden" name="item-id" value="@item.ItemID" />
             <input type="hidden" name="is-read" value="@(item.IsRead ? "read" : "")" />
             <input type="hidden" name="is-starred" value="@(item.IsStarred ? "starred" : "")" />
+
             <h3><a href="@(Server.UrlDecode(item.URL))">@item.Title</a></h3>
+            <div class="item-icons">
+                @if (item.IsStarred)
+                {
+                    <img src="@Url.Content("~/Images/star_lit.png")" alt="@item.ItemID" class="star" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/Images/star.png")" alt="@item.ItemID" class="star" />
+                }
+
+                @if (!item.IsRead)
+                {
+                    <img src="@Url.Content("~/Images/mail.png")" alt="read-icon" class="read-icon-@item.ItemID" />
+                }
+            </div>
+            <div style="clear: both;"></div>
             <p class="date">@(item.PublishDate.HasValue ? item.PublishDate.Value.ToString() : string.Empty)</p>
             @Html.Raw(item.Content)
         </div>
-        }
+    }
+
+    @if (Model.Items.Count == 0)
+    {
+        <div class="no-items">
+            No more to read... <br /><br />
+            <img src="@Url.Content("~/Images/i-should-buy-a-boat-cat.jpg")" alt="boatcat"/>
+        </div>
     }
 </div>
 <div class="clear">

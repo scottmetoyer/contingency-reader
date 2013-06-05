@@ -21,6 +21,64 @@ namespace Reader.Web.Controllers
             _services = new FeedServices(_repository);
         }
 
+        public HttpResponseMessage SetStar([FromBody]int id)
+        {
+            bool success = false;
+
+            try
+            {
+                var item = _repository.Items.FirstOrDefault(x => x.ItemID == id);
+                if (item != null)
+                {
+                    item.IsStarred = true;
+                    _repository.SaveItem(item);
+                    success = true;
+                }
+            }
+            catch
+            {
+                success = false;
+            }
+
+            if (success)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Accepted);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+        }
+
+        public HttpResponseMessage RemoveStar([FromBody]int id)
+        {
+            bool success = false;
+
+            try
+            {
+                var item = _repository.Items.FirstOrDefault(x => x.ItemID == id);
+                if (item != null)
+                {
+                    item.IsStarred = false;
+                    _repository.SaveItem(item);
+                    success = true;
+                }
+            }
+            catch
+            {
+                success = false;
+            }
+
+            if (success)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Accepted);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+        }
+
         public HttpResponseMessage Read([FromBody]int id)
         {
             bool success = false;

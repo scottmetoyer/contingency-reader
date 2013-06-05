@@ -212,8 +212,13 @@
     <Content Include="Default.config" />
     <None Include="Properties\PublishProfiles\contingencyreader.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Images\darkstar.png" />
+    <Content Include="Images\i-should-buy-a-boat-cat.jpg" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\mail.png" />
     <Content Include="Images\rss_ico.png" />
+    <Content Include="Images\star.png" />
+    <Content Include="Images\star_lit.png" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

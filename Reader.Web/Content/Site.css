@@ -85,6 +85,13 @@ textarea
     display: none;
 }
 
+.no-items
+{
+    color: #686868;
+    text-align: left;
+    margin-top: 30px;
+}
+
 #header
 {
     height: 80px;
@@ -99,9 +106,10 @@ textarea
     position: absolute;
     top: 90px;
     left: 0px;
-    width: 235px;
+    width: 230px;
     padding: .5em;
     padding-right: 0;
+    margin-right: 0;
     bottom: .5em;
     overflow-y: auto;
     overflow-x: hidden;
@@ -285,17 +293,37 @@ a img
     overflow-x: hidden;
 }
 
+    .item .item-icons
+    {
+        float: right;
+        text-align: right;
+    }
+
+        .item .item-icons img
+        {
+            float: right;
+            margin-left: 10px;
+        }
+
     .item h3
     {
         margin-top: .5em;
         margin-bottom: 0;
         font-size: 1.3em;
+        float: left;
     }
 
         .item h3 a
         {
             text-decoration: none;
+            color: blue;
         }
+
+            .item h3 a:visited
+            {
+                text-decoration: none;
+                color: blue;
+            }
 
 .selected-item
 {

@@ -45,7 +45,23 @@ namespace Reader.Web.Controllers
                 {
                     try
                     {
-                        model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID).ToList();
+                        model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID && x.IsRead == false).ToList();
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["Error"] = "Error reading feed: " + ex.Message.ToString();
+                    }
+                }
+
+                // Retrieve starred items
+                if (string.Compare(feed, "starred", true) >= 0)
+                {
+                    model.SelectedFeed.Feed.URL = "starred";
+                    model.SelectedFeed.Feed.DisplayName = "Starred Items";
+
+                    try
+                    {
+                        model.Items = _repository.Items.Where(x => x.IsStarred == true).ToList();
                     }
                     catch (Exception ex)
                     {
