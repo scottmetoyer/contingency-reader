@@ -213,12 +213,23 @@
         </div>
     }
 
-    @if (Model.Items.Count == 0)
+    @if (Model.SelectedFeed.Feed.URL == string.Empty)
     {
         <div class="no-items">
-            No more to read... <br /><br />
+            Select a feed on the left and start reading!
+        </div>
+    }
+    else
+    {
+        if (Model.Items.Count == 0)
+        {
+        <div class="no-items">
+            No more to read here...
+            <br />
+            <br />
             <img src="@Url.Content("~/Images/i-should-buy-a-boat-cat.jpg")" alt="boatcat"/>
         </div>
+        }
     }
 </div>
 <div class="clear">

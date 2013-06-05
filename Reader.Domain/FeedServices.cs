@@ -101,7 +101,13 @@ namespace Reader.Domain
                     item.FetchDate = DateTime.Now;
 
                     if (i.PublishDate != null)
+                    {
                         item.PublishDate = i.PublishDate.DateTime;
+                    }
+                    else
+                    {
+                        item.PublishDate = DateTime.Now;
+                    }
 
                     if (i.Content != null)
                     {

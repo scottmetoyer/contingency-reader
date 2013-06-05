@@ -45,7 +45,7 @@ namespace Reader.Web.Controllers
                 {
                     try
                     {
-                        model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID && x.IsRead == false).ToList();
+                        model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID && x.IsRead == false).OrderByDescending(x => x.PublishDate).ToList();
                     }
                     catch (Exception ex)
                     {
@@ -61,7 +61,7 @@ namespace Reader.Web.Controllers
 
                     try
                     {
-                        model.Items = _repository.Items.Where(x => x.IsStarred == true).ToList();
+                        model.Items = _repository.Items.Where(x => x.IsStarred == true).OrderByDescending(x => x.PublishDate).ToList();
                     }
                     catch (Exception ex)
                     {
