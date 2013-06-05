@@ -22,6 +22,51 @@ namespace Reader.Web.Controllers
             _services = new FeedServices(_repository);
         }
 
+        public ActionResult MarkAllRead(int feedId)
+        {
+            try
+            {
+                var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
+                return RedirectToAction("View", new { feed = feed.URL });
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error marking feed read: " + ex.Message.ToString();
+            }
+
+            return RedirectToAction("View");
+        }
+
+        public ActionResult Unsubscribe(int feedId)
+        {
+            try
+            {
+                var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
+                return RedirectToAction("View", new { feed = feed.URL });
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error unsubscribing from feed: " + ex.Message.ToString();
+            }
+
+            return RedirectToAction("View");
+        }
+
+        public ActionResult Refresh(int feedId)
+        {
+            try
+            {
+                var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
+                return RedirectToAction("View", new { feed = feed.URL });
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error refreshing feed: " + ex.Message.ToString();
+            }
+
+            return RedirectToAction("View");
+        }
+
         public ActionResult View(string feed)
         {
             var model = new ItemsViewModel();
