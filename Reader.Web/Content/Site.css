@@ -101,6 +101,18 @@ textarea
     border-bottom: solid 1px #686868;
 }
 
+    #header h1
+    {
+        margin: 0;
+        padding: 20px;
+    }
+
+        #header h1 a
+        {
+            text-decoration: none;
+            color: #000;
+        }
+
 #nav
 {
     position: absolute;
@@ -125,7 +137,6 @@ textarea
     right: 6px;
     bottom: 6px;
     width: auto;
-    padding-bottom: 200px;
 }
 
 #feed-controls

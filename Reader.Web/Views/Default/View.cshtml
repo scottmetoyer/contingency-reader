@@ -15,7 +15,7 @@
 
             // Intialize infinite scroll
             $('#content').jscroll({
-                padding: 20,
+                padding: 100,
                 nextSelector: 'a.jscroll-next:last',
                 loadingHtml: '<img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Loading" />'
             });
@@ -115,7 +115,13 @@
         </ul>
     </div>
 </div>
-@if (!string.IsNullOrEmpty(Model.ChannelURL))
+@if (string.IsNullOrEmpty(Model.ChannelURL))
+{
+    <div id="feed-controls">
+        <div class="feed-name">Welcome to Contingency Reader</div>
+    </div>
+}
+else
 {
     <div id="feed-controls">
         <div class="feed-name">@Model.ChannelName</div>
