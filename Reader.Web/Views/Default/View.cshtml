@@ -155,7 +155,7 @@
     <div id="feed-controls">
         <div class="feed-name">@Model.SelectedFeed.Feed.DisplayName</div>
 
-        @if (Model.SelectedFeed.UnreadCount > 0)
+        @if (Model.SelectedFeed.Feed.URL != "starred")
         {
             <div>
                 @using (Html.BeginForm("Refresh", "Default"))
@@ -176,6 +176,20 @@
                 {
                     <input type="hidden" name="feedid" value="@Model.SelectedFeed.Feed.FeedID" />
                     <input type="submit" class="button gray" value="Unsubscribe" name="unsubscribe-button" onclick="return confirm('Are you sure you want to unsubscribe from this feed?')" />
+                }
+            </div>
+            <div>
+                @using (Html.BeginForm("SetViewMode", "Default"))
+                {
+                    <input type="hidden" name="feedid" value="@Model.SelectedFeed.Feed.FeedID" />
+                    if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
+                    {
+                    <input type="submit" class="button gray" value="Show All Items" name="mode" />
+                    }
+                    else
+                    {
+                    <input type="submit" class="button gray" value="Show Unread Items" name="mode" />
+                    }
                 }
             </div>
         }

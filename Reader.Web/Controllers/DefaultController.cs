@@ -22,11 +22,36 @@ namespace Reader.Web.Controllers
             _services = new FeedServices(_repository);
         }
 
+        public ActionResult SetViewMode(string mode, int feedId)
+        {
+            try
+            {
+                var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
+                Session["ViewMode"] = mode;
+                return RedirectToAction("View", new { feed = feed.URL });
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error setting view mode: " + ex.Message.ToString();
+            }
+
+            return RedirectToAction("View");
+        }
+
         public ActionResult MarkAllRead(int feedId)
         {
             try
             {
                 var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
+                var items = _repository.Items.Where(x => x.FeedID == feedId && x.IsRead == false);
+
+                foreach (var item in items)
+                {
+                    item.IsRead = true;
+                }
+
+                _repository.SaveChanges();
+
                 return RedirectToAction("View", new { feed = feed.URL });
             }
             catch (Exception ex)
@@ -96,7 +121,14 @@ namespace Reader.Web.Controllers
                 {
                     try
                     {
-                        model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID && x.IsRead == false).OrderByDescending(x => x.PublishDate).ToList();
+                        if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
+                        {
+                            model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID && x.IsRead == false).OrderByDescending(x => x.PublishDate).ToList();
+                        }
+                        else
+                        {
+                            model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID).OrderByDescending(x => x.PublishDate).ToList();
+                        }
                     }
                     catch (Exception ex)
                     {

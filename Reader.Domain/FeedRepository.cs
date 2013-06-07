@@ -63,5 +63,10 @@ namespace Reader.Domain
             _itemTable.DeleteAllOnSubmit(items);
             _context.SubmitChanges();
         }
+
+        public void SaveChanges()
+        {
+            _context.SubmitChanges();
+        }
     }
 }
