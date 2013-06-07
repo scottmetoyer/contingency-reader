@@ -6,22 +6,22 @@
 @section scripts
 {
     <script type="text/javascript">
-        // Add all the item ids to a JavaScript array so we can hotkey page through them
-        var itemIdArray = [];
-        var activeItemId = 0;
-
-        @foreach (var i in Model.Items.Where(x => x.IsRead == false).ToList())
-        {
-            <text>itemIdArray.push(</text>@i.ItemID<text>);</text>
-        }
-
         $(document).ready(function () {
-            $('.item').click(function (e) {
+            // Initialize click-to-scroll
+            $('#content').on("click", ".item", function (event) {
                 $('#content').scrollTo(this);
-                setActiveItem($(this));
+                selectItem($(this));
             });
 
-            $('.star').click(function (e) {
+            // Intialize infinite scroll
+            $('#content').jscroll({
+                padding: 20,
+                nextSelector: 'a.jscroll-next:last',
+                loadingHtml: '<img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Loading" />'
+            });
+
+            // Initialize starring
+            $('#content').on("click", ".star", function (event) {
                 var imagePath = $(this).attr('src');
 
                 if (imagePath.indexOf('star.png') >= 0) {
@@ -32,39 +32,9 @@
                     $.post('api/items/removeStar', "=" + $(this).attr("alt"));
                 }
 
-                event.stopPropagation();
-            });
-
-            $(document).keypress(function (event) {
-                if (itemIdArray.length == 0) {
+                if ($(event.target).is('.star')) {
+                    event.stopPropagation();
                     return;
-                }
-
-                if (event.which == 106 || event.which == 107) {
-                    currentIndex = jQuery.inArray(activeItemId, itemIdArray);
-
-                    if (currentIndex == -1) {
-                        activeItemId = itemIdArray[0];
-                    } else {
-                        if (event.which == 106) {
-                            currentIndex = currentIndex + 1;
-                        } else if (event.which == 107) {
-                            currentIndex = currentIndex - 1;
-                        }
-
-                        // Check bounds
-                        if (currentIndex >= itemIdArray.length) {
-                            activeItemId = itemIdArray[itemIdArray.length - 1];
-                        } else if (currentIndex <= 0) {
-                            activeItemId = itemIdArray[0];
-                        } else {
-                            activeItemId = itemIdArray[currentIndex];
-                        }
-                    }
-
-                    var item = $("div.item-id-" + activeItemId);
-                    $('#content').scrollTo(item);
-                    setActiveItem($(item));
                 }
             });
 
@@ -75,9 +45,7 @@
             $(".alert").delay(5000).fadeOut('slow');
         });
 
-        function setActiveItem(item) {
-            activeItemId = parseInt(item.children("input[name='item-id']").val(), 10);
-
+        function selectItem(item) {
             // Side the active item border styling
             $('.item').removeClass('selected-item');
             item.addClass('selected-item');
@@ -121,7 +89,7 @@
         <ul>
             @foreach (var feed in Model.Feeds)
             {
-                <li class="@(feed.Feed.URL == Model.SelectedFeed.Feed.URL ? "selected-feed" : "")">
+                <li class="@(feed.Selected == true ? "selected-feed" : "")">
                     <a href="@Url.Action("View", new { feed = feed.Feed.URL })">
                         <div class="favicon">
                             <img height="16" width="16" src="@Url.Content("~/Images/rss_ico.png")" />
@@ -133,7 +101,7 @@
                 </li>
             }
             <li style="border-bottom: 1px solid #ebebeb; margin-top: 10px; margin-bottom: 10px;"></li>
-            <li class="@(Model.SelectedFeed.Feed.URL == "starred" ? "selected-feed" : "")">
+            <li class="@(Model.ChannelURL == "starred" ? "selected-feed" : "")">
                 <a href="@Url.Action("View", new { feed = "starred" })">
                     <div class="favicon">
                         <img height="16" width="16" src="@Url.Content("~/Images/darkstar.png")" />
@@ -147,38 +115,40 @@
         </ul>
     </div>
 </div>
-@if (Model.SelectedFeed.Feed.URL != string.Empty)
+@if (!string.IsNullOrEmpty(Model.ChannelURL))
 {
     <div id="feed-controls">
-        <div class="feed-name">@Model.SelectedFeed.Feed.DisplayName</div>
+        <div class="feed-name">@Model.ChannelName</div>
 
-        @if (Model.SelectedFeed.Feed.URL != "starred")
+        @if (Model.ChannelURL != "starred")
         {
+            var selectedFeed = Model.Feeds.FirstOrDefault(x => x.Selected == true).Feed;
+            
             <div>
                 @using (Html.BeginForm("Refresh", "Default"))
                 {
-                    <input type="hidden" name="feedid" value="@Model.SelectedFeed.Feed.FeedID" />
+                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
                     <input type="submit" class="button gray" value="Refresh" name="refresh-button" />
                 }
             </div>
             <div>
                 @using (Html.BeginForm("MarkAllRead", "Default"))
                 {
-                    <input type="hidden" name="feedid" value="@Model.SelectedFeed.Feed.FeedID" />
+                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
                     <input type="submit" class="button gray" value="Mark All Read" name="markread-button" onclick="return confirm('Are you sure you want to mark all items read in this feed?')" />
                 }
             </div>
             <div>
                 @using (Html.BeginForm("Unsubscribe", "Default"))
                 {
-                    <input type="hidden" name="feedid" value="@Model.SelectedFeed.Feed.FeedID" />
+                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
                     <input type="submit" class="button gray" value="Unsubscribe" name="unsubscribe-button" onclick="return confirm('Are you sure you want to unsubscribe from this feed?')" />
                 }
             </div>
             <div>
                 @using (Html.BeginForm("SetViewMode", "Default"))
                 {
-                    <input type="hidden" name="feedid" value="@Model.SelectedFeed.Feed.FeedID" />
+                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
                     if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
                     {
                     <input type="submit" class="button gray" value="Show All Items" name="mode" />
@@ -197,29 +167,10 @@
 <div id="content">
     @foreach (var item in Model.Items)
     {
-        <div class="item item-id-@item.ItemID.ToString()">
-            <input type="hidden" name="item-id" value="@item.ItemID" />
-            <input type="hidden" name="is-read" value="@(item.IsRead ? "read" : "")" />
-            <input type="hidden" name="is-starred" value="@(item.IsStarred ? "starred" : "")" />
-
-            <h3><a  href="@(Server.UrlDecode(item.URL))">@item.Title</a></h3>
-            <div class="item-icons">
-                @if (item.IsStarred)
-                {
-                    <img src="@Url.Content("~/Images/star_lit.png")" alt="@item.ItemID" class="star" />
-                }
-                else
-                {
-                    <img src="@Url.Content("~/Images/star.png")" alt="@item.ItemID" class="star" />
-                }
-            </div>
-            <div style="clear: both;"></div>
-            <p class="date">@(item.PublishDate.HasValue ? item.PublishDate.Value.ToString() : string.Empty)</p>
-            @Html.Raw(item.Content)
-        </div>
+        @Html.Partial("Item", item)
     }
 
-    @if (Model.SelectedFeed.Feed.URL == string.Empty)
+    @if (string.IsNullOrEmpty(Model.ChannelURL))
     {
         <div class="no-items">
             Select a feed on the left and start reading!
@@ -230,7 +181,7 @@
         if (Model.Items.Count == 0)
         {
         <div class="no-items">
-            No more to read here...
+            Nothing more to read here...
             <br />
             <br />
             <img src="@Url.Content("~/Images/i-should-buy-a-boat-cat.jpg")" alt="boatcat"/>

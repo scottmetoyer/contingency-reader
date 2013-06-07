@@ -141,6 +141,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Helpers\ViewModelBuilder.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\FeedsController.cs" />
@@ -150,6 +151,7 @@
     </Compile>
     <Compile Include="Models\FeedViewModel.cs" />
     <Compile Include="Models\ItemsViewModel.cs" />
+    <Compile Include="Models\ItemViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +214,7 @@
     <Content Include="Default.config" />
     <None Include="Properties\PublishProfiles\contingencyreader.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\darkstar.png" />
     <Content Include="Images\i-should-buy-a-boat-cat.jpg" />
     <Content Include="Images\logo.png" />
@@ -246,6 +249,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Views\Service\Test.cshtml" />
+    <Content Include="Views\Default\Item.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,29 @@
+﻿@model Reader.Web.Models.ItemViewModel
+
+<div class="item item-id-@Model.Item.ItemID.ToString()">
+    <script type="text/javascript">
+
+    </script>
+    <input type="hidden" name="item-id" value="@Model.Item.ItemID" />
+    <input type="hidden" name="is-read" value="@(Model.Item.IsRead ? "read" : "")" />
+    <input type="hidden" name="is-starred" value="@(Model.Item.IsStarred ? "starred" : "")" />
+
+    <h3><a  href="@(Server.UrlDecode(Model.Item.URL))">@Model.Item.Title</a></h3>
+    <div class="item-icons">
+        @if (Model.Item.IsStarred)
+        {
+            <img src="@Url.Content("~/Images/star_lit.png")" alt="@Model.Item.ItemID" class="star" onclick="" />
+        }
+        else
+        {
+            <img src="@Url.Content("~/Images/star.png")" alt="@Model.Item.ItemID" class="star" onclick="" />
+        }
+    </div>
+    <div style="clear: both;"></div>
+    <p class="date">@(Model.Item.PublishDate.HasValue ? Model.Item.PublishDate.Value.ToString() : string.Empty)</p>
+    @Html.Raw(Model.Item.Content)
+</div>
+@if (Model.NextItemID > 0)
+{
+    <a href="@Url.Action("Item", "Default", new { id = Model.NextItemID })" class="jscroll-next"></a>
+}

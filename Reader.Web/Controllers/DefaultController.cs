@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Reader.Domain;
 using Reader.Domain.Configuration;
+using Reader.Web.Helpers;
 using Reader.Web.Models;
 
 namespace Reader.Web.Controllers
@@ -14,12 +15,14 @@ namespace Reader.Web.Controllers
     {
         private FeedRepository _repository;
         private FeedServices _services;
+        private ViewModelBuilder _builder;
 
         public DefaultController()
         {
             UserSettingsSection config = (UserSettingsSection)System.Configuration.ConfigurationManager.GetSection("userSettings");
             _repository = new FeedRepository(config.ConnectionString.Value);
             _services = new FeedServices(_repository);
+            _builder = new ViewModelBuilder(_repository);
         }
 
         public ActionResult SetViewMode(string mode, int feedId)
@@ -88,6 +91,7 @@ namespace Reader.Web.Controllers
             {
                 var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
                 _services.Fetch(feed);
+                TempData["Message"] = feed.DisplayName + " has been refreshed";
                 return RedirectToAction("View", new { feed = feed.URL });
             }
             catch (Exception ex)
@@ -101,33 +105,29 @@ namespace Reader.Web.Controllers
         public ActionResult View(string feed)
         {
             var model = new ItemsViewModel();
+            model.ChannelURL = feed;
 
             try
             {
+                var selectedFeed = _repository.Feeds.FirstOrDefault(x => x.URL == feed);
                 var feeds = _repository.Feeds.ToList();
-                foreach (var f in feeds)
+                model.Feeds = _builder.BuildFeedsViewModelList(feeds, selectedFeed);
+              
+                if (selectedFeed != null)
                 {
-                    var feedViewModel = new FeedViewModel { Feed = f };
-                    feedViewModel.UnreadCount = _repository.Items.Count(x => x.FeedID == f.FeedID && x.IsRead == false);
-                    model.Feeds.Add(feedViewModel);
+                    model.ChannelName = selectedFeed.DisplayName;
 
-                    if (f.URL == feed)
-                    {
-                        model.SelectedFeed = feedViewModel;
-                    }
-                }
-
-                if (model.SelectedFeed.Feed.URL != string.Empty)
-                {
                     try
                     {
                         if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
                         {
-                            model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID && x.IsRead == false).OrderByDescending(x => x.PublishDate).ToList();
+                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID && x.IsRead == false).OrderByDescending(x => x.PublishDate).Take(3).ToList();
+                            model.Items = _builder.BuildItemsViewModelList(items, true);
                         }
                         else
                         {
-                            model.Items = _repository.Items.Where(x => x.FeedID == model.SelectedFeed.Feed.FeedID).OrderByDescending(x => x.PublishDate).ToList();
+                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID).OrderByDescending(x => x.PublishDate).Take(3).ToList();
+                            model.Items = _builder.BuildItemsViewModelList(items, true);
                         }
                     }
                     catch (Exception ex)
@@ -137,14 +137,14 @@ namespace Reader.Web.Controllers
                 }
 
                 // Retrieve starred items
-                if (string.Compare(feed, "starred", true) >= 0)
+                if (string.Compare(model.ChannelURL, "starred", true) >= 0)
                 {
-                    model.SelectedFeed.Feed.URL = "starred";
-                    model.SelectedFeed.Feed.DisplayName = "Starred Items";
+                    model.ChannelName = "Starred Items";
 
                     try
                     {
-                        model.Items = _repository.Items.Where(x => x.IsStarred == true).OrderByDescending(x => x.PublishDate).ToList();
+                        var items = _repository.Items.Where(x => x.IsStarred == true).OrderByDescending(x => x.PublishDate).ToList();
+                        model.Items = _builder.BuildItemsViewModelList(items, false);
                     }
                     catch (Exception ex)
                     {
@@ -155,6 +155,23 @@ namespace Reader.Web.Controllers
             catch (Exception ex)
             {
                 TempData["Error"] = ex.Message.ToString();
+            }
+
+            return View(model);
+        }
+
+        public ActionResult Item(int id)
+        {
+            ItemViewModel model = new ItemViewModel();
+            model.Item = _repository.Items.FirstOrDefault(x => x.ItemID == id);
+            Item nextItem = null;
+
+            bool includeRead = Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items" ? false : true;
+            nextItem = _services.GetNextItem(includeRead, id, model.Item.FeedID);
+
+            if (nextItem != null)
+            {
+                model.NextItemID = nextItem.ItemID;
             }
 
             return View(model);

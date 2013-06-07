@@ -139,5 +139,21 @@ namespace Reader.Domain
                 }
             }
         }
+
+        public Item GetNextItem(bool includeRead, int itemId, int feedId)
+        {
+            Item nextItem = null;
+            var item = _repository.Items.FirstOrDefault(x => x.ItemID == itemId);
+            if (includeRead)
+            {
+                nextItem = _repository.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(x => x.FeedID == feedId && x.PublishDate < item.PublishDate);
+            }
+            else
+            {
+                nextItem = _repository.Items.OrderByDescending(x => x.PublishDate).FirstOrDefault(x => x.FeedID == feedId && x.IsRead == false && x.PublishDate < item.PublishDate);
+            }
+
+            return nextItem;
+        }
     }
 }

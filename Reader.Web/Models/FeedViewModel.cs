@@ -10,6 +10,8 @@ namespace Reader.Web.Models
     {
         public Feed Feed { get; set; }
 
+        public bool Selected { get; set; }
+
         public int UnreadCount { get; set; }
 
         public FeedViewModel()
