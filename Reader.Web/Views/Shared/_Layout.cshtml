@@ -8,6 +8,18 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert error">
+            @TempData["Error"]
+        </div>
+    }
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert message">
+            @TempData["Message"]
+        </div>
+    }
     <div id="header">
         <img src="@Url.Content("~/Images/logo.png")" alt="logo" />
     </div>

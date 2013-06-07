@@ -57,5 +57,11 @@ namespace Reader.Domain
             _feedTable.DeleteOnSubmit(feed);
             _context.SubmitChanges();
         }
+
+        public void DeleteItems(IEnumerable<Item> items)
+        {
+            _itemTable.DeleteAllOnSubmit(items);
+            _context.SubmitChanges();
+        }
     }
 }

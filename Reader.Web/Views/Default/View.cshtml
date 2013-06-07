@@ -168,7 +168,7 @@
                 @using (Html.BeginForm("MarkAllRead", "Default"))
                 {
                     <input type="hidden" name="feedid" value="@Model.SelectedFeed.Feed.FeedID" />
-                    <input type="submit" class="button gray" value="Mark All Read" name="markread-button" />
+                    <input type="submit" class="button gray" value="Mark All Read" name="markread-button" onclick="return confirm('Are you sure you want to mark all items read in this feed?')" />
                 }
             </div>
             <div>
@@ -184,18 +184,6 @@
 }
 
 <div id="content">
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert error">
-            @TempData["Error"]
-        </div>
-    }
-    @if (TempData["Message"] != null)
-    {
-        <div class="alert message">
-            @TempData["Message"]
-        </div>
-    }
     @foreach (var item in Model.Items)
     {
         <div class="item item-id-@item.ItemID.ToString()">

@@ -42,7 +42,12 @@ namespace Reader.Web.Controllers
             try
             {
                 var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
-                return RedirectToAction("View", new { feed = feed.URL });
+                var items = _repository.Items.Where(x => x.FeedID == feed.FeedID && x.IsStarred == false);
+                _repository.DeleteFeed(feed);
+                _repository.DeleteItems(items);
+
+                TempData["Message"] = "You have been unsubscribed from " + feed.DisplayName;
+                return RedirectToAction("View");
             }
             catch (Exception ex)
             {
@@ -57,6 +62,7 @@ namespace Reader.Web.Controllers
             try
             {
                 var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
+                _services.Fetch(feed);
                 return RedirectToAction("View", new { feed = feed.URL });
             }
             catch (Exception ex)
@@ -143,7 +149,7 @@ namespace Reader.Web.Controllers
                     feed.DisplayName = _services.GetDisplayName(url);
                     _repository.SaveFeed(feed);
 
-                    TempData["Message"] = "Feed added";
+                    TempData["Message"] = feed.DisplayName + " added";
                 }
                 catch (Exception ex)
                 {
