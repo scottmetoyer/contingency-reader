@@ -311,6 +311,7 @@ a img
 .alert
 {
     font-weight: bold;
+    font-size: 11px;
     padding: .5em;
     text-align: center;
     width: 400px;

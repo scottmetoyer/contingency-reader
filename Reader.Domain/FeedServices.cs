@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using System.Web;
 using System.Net;
 using System.IO;
+using HtmlAgilityPack;
 
 namespace Reader.Domain
 {
@@ -110,6 +111,8 @@ namespace Reader.Domain
                     item.Content = i.Summary.Text;
                 }
 
+                item.Content = this.ScrubScripts(item.Content);
+
                 items.Add(item);
             }
 
@@ -123,6 +126,17 @@ namespace Reader.Domain
                     _repository.SaveItem(i);
                 }
             }
+        }
+
+        public string ScrubScripts(string fragment)
+        {
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(fragment);
+            doc.DocumentNode.Descendants()
+                            .Where(n => n.Name == "script")
+                            .ToList()
+                            .ForEach(n => n.Remove());
+            return doc.DocumentNode.OuterHtml;
         }
 
         public Item GetNextItem(bool includeRead, int itemId, int feedId)
