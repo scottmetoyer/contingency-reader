@@ -122,7 +122,14 @@
     }
     else
     {
+        if (Model.BlogURL != string.Empty)
+        {
+        <div class="feed-name"><a href="@Model.BlogURL">@Model.ChannelName</a></div>
+        }
+        else
+        {
         <div class="feed-name">@Model.ChannelName</div>
+        }
 
         if (Model.ChannelURL != "starred")
         {

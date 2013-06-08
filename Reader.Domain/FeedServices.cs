@@ -29,26 +29,6 @@ namespace Reader.Domain
             _repository = repository;
         }
 
-        public bool ValidateUrl(string url)
-        {
-            bool valid = false;
-
-            try
-            {
-                XmlReader reader = XmlReader.Create(url);
-                Rss20FeedFormatter formatter = new Rss20FeedFormatter();
-                formatter.ReadFrom(reader);
-                reader.Close();
-                valid = true;
-            }
-            catch
-            {
-                valid = false;
-            }
-
-            return valid;
-        }
-
         public void Fetch(Feed feed)
         {
             XmlReader reader = XmlReader.Create(HttpUtility.UrlDecode(feed.URL));
@@ -123,7 +103,12 @@ namespace Reader.Domain
                 if (!_repository.Items.Any(x => x.URL == i.URL))
                 {
                     i.FetchDate = DateTime.Now;
-                    _repository.SaveItem(i);
+
+                    // Don't save advertisements
+                    if (string.Compare(i.Title, "sponsored post", true) < 0)
+                    {
+                        _repository.SaveItem(i);
+                    }
                 }
             }
         }
@@ -162,7 +147,7 @@ namespace Reader.Domain
             formatter.ReadFrom(reader);
             reader.Close();
             feed.DisplayName = formatter.Feed.Title.Text;
-
+       
             var link = formatter.Feed.Links.FirstOrDefault(x => x.RelationshipType == "alternate");
 
             if (link != null)

@@ -13,6 +13,8 @@ namespace Reader.Web.Models
 
         public string ChannelURL { get; set; }
 
+        public string BlogURL { get; set; }
+
         public List<FeedViewModel> Feeds { get; set; }
 
         public List<ItemViewModel> Items { get; set; }

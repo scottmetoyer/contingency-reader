@@ -194,6 +194,18 @@ textarea
         padding-left: 0;
     }
 
+        #feed-controls .feed-name a
+        {
+            text-decoration: none;
+            color: #000;
+        }
+
+            #feed-controls .feed-name a:visited
+            {
+                text-decoration: none;
+                color: #000;
+            }
+
 .clear
 {
     clear: both;

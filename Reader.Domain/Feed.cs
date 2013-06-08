@@ -38,6 +38,9 @@ namespace Reader.Domain
         public Feed()
         {
             this.Favicon = new byte[0];
+            this.URL = string.Empty;
+            this.BlogURL = string.Empty;
+            this.DisplayName = string.Empty;
         }
     }
 }

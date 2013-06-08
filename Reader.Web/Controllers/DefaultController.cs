@@ -68,26 +68,6 @@ namespace Reader.Web.Controllers
             return RedirectToAction("View");
         }
 
-        public ActionResult Unsubscribe(int feedId)
-        {
-            try
-            {
-                var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
-                var items = _repository.Items.Where(x => x.FeedID == feed.FeedID && x.IsStarred == false);
-                _repository.DeleteFeed(feed);
-                _repository.DeleteItems(items);
-
-                TempData["Message"] = "You have been unsubscribed from " + feed.DisplayName;
-                return RedirectToAction("View");
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Error unsubscribing from feed: " + ex.Message.ToString();
-            }
-
-            return RedirectToAction("View");
-        }
-
         public ActionResult Refresh(int feedId)
         {
             try
@@ -119,6 +99,7 @@ namespace Reader.Web.Controllers
                 if (selectedFeed != null)
                 {
                     model.ChannelName = selectedFeed.DisplayName;
+                    model.BlogURL = selectedFeed.BlogURL;
 
                     try
                     {
@@ -202,10 +183,6 @@ namespace Reader.Web.Controllers
             {
                 TempData["Error"] = "URL is required to add a feed.";
             }
-            else if (!_services.ValidateUrl(url))
-            {
-                TempData["Error"] = "The URL you entered is not a valid RSS feed.";
-            }
             else
             {
                 try
@@ -224,8 +201,28 @@ namespace Reader.Web.Controllers
                 }
                 catch (Exception ex)
                 {
-                    TempData["Error"] = ex.Message.ToString();
+                    TempData["Error"] = "Error: " + ex.Message.ToString();
                 }
+            }
+
+            return RedirectToAction("View");
+        }
+
+        public ActionResult Unsubscribe(int feedId)
+        {
+            try
+            {
+                var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
+                var items = _repository.Items.Where(x => x.FeedID == feed.FeedID && x.IsStarred == false);
+                _repository.DeleteFeed(feed);
+                _repository.DeleteItems(items);
+
+                TempData["Message"] = "You have been unsubscribed from " + feed.DisplayName;
+                return RedirectToAction("View");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error unsubscribing from feed: " + ex.Message.ToString();
             }
 
             return RedirectToAction("View");
