@@ -124,12 +124,12 @@ namespace Reader.Web.Controllers
                     {
                         if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
                         {
-                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID && x.IsRead == false).OrderByDescending(x => x.PublishDate).Take(3).ToList();
+                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID && x.IsRead == false).OrderByDescending(x => x.ItemID).Take(3).ToList();
                             model.Items = _builder.BuildItemsViewModelList(items, true);
                         }
                         else
                         {
-                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID).OrderByDescending(x => x.PublishDate).Take(3).ToList();
+                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID).OrderByDescending(x => x.ItemID).Take(3).ToList();
                             model.Items = _builder.BuildItemsViewModelList(items, true);
                         }
                     }
