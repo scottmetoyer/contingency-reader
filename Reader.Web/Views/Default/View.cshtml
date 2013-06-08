@@ -115,61 +115,57 @@
         </ul>
     </div>
 </div>
-@if (string.IsNullOrEmpty(Model.ChannelURL))
-{
-    <div id="feed-controls">
+<div id="feed-controls">
+    @if (string.IsNullOrEmpty(Model.ChannelURL))
+    {
         <div class="feed-name">Welcome to Contingency Reader</div>
-    </div>
-}
-else
-{
-    <div id="feed-controls">
+    }
+    else
+    {
         <div class="feed-name">@Model.ChannelName</div>
 
-        @if (Model.ChannelURL != "starred")
+        if (Model.ChannelURL != "starred")
         {
-            var selectedFeed = Model.Feeds.FirstOrDefault(x => x.Selected == true).Feed;
-            
-            <div>
-                @using (Html.BeginForm("Refresh", "Default"))
+            var selectedFeed = Model.Feeds.FirstOrDefault(x => x.Selected == true).Feed;       
+        <div>
+            @using (Html.BeginForm("Refresh", "Default"))
+            {
+                <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
+                <input type="submit" class="button gray" value="Refresh" name="refresh-button" />
+            }
+        </div>
+        <div>
+            @using (Html.BeginForm("MarkAllRead", "Default"))
+            {
+                <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
+                <input type="submit" class="button gray" value="Mark All Read" name="markread-button" onclick="return confirm('Are you sure you want to mark all items read in this feed?')" />
+            }
+        </div>
+        <div>
+            @using (Html.BeginForm("Unsubscribe", "Default"))
+            {
+                <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
+                <input type="submit" class="button gray" value="Unsubscribe" name="unsubscribe-button" onclick="return confirm('Are you sure you want to unsubscribe from this feed?')" />
+            }
+        </div>
+        <div>
+            @using (Html.BeginForm("SetViewMode", "Default"))
+            {
+                <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
+                if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
                 {
-                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
-                    <input type="submit" class="button gray" value="Refresh" name="refresh-button" />
+                <input type="submit" class="button gray" value="Show All Items" name="mode" />
                 }
-            </div>
-            <div>
-                @using (Html.BeginForm("MarkAllRead", "Default"))
+                else
                 {
-                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
-                    <input type="submit" class="button gray" value="Mark All Read" name="markread-button" onclick="return confirm('Are you sure you want to mark all items read in this feed?')" />
+                <input type="submit" class="button gray" value="Show Unread Items" name="mode" />
                 }
-            </div>
-            <div>
-                @using (Html.BeginForm("Unsubscribe", "Default"))
-                {
-                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
-                    <input type="submit" class="button gray" value="Unsubscribe" name="unsubscribe-button" onclick="return confirm('Are you sure you want to unsubscribe from this feed?')" />
-                }
-            </div>
-            <div>
-                @using (Html.BeginForm("SetViewMode", "Default"))
-                {
-                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
-                    if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
-                    {
-                    <input type="submit" class="button gray" value="Show All Items" name="mode" />
-                    }
-                    else
-                    {
-                    <input type="submit" class="button gray" value="Show Unread Items" name="mode" />
-                    }
-                }
-            </div>
+            }
+        </div>
         }
         <div style="clear: both;"></div>
-    </div>
-}
-
+    }
+</div>
 <div id="content">
     @foreach (var item in Model.Items)
     {
@@ -196,4 +192,7 @@ else
     }
 </div>
 <div class="clear">
+</div>
+<div id="footer">
+    <a href="http://www.scottmetoyer.com">Scott Metoyer 2013</a> | <a href="@Url.Action("Logout", "Account")">Log out</a>
 </div>

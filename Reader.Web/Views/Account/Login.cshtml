@@ -1,11 +1,12 @@
 ﻿@{
     ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div style="padding: 1em;">
     <form method="post" action="Login">
         <h2>Login</h2>
-        <table cellpadding="3" cellspacing="0" class="style1">
+        <table>
             <tr>
                 <td align="right">Username :</td>
                 <td>
@@ -25,11 +26,14 @@
 
                     @if (TempData["Error"] != null)
                     {<strong style="color: red;">
-                            @TempData["Error"]</strong>
+                        @TempData["Error"]</strong>
                     }
 
                 </td>
             </tr>
         </table>
     </form>
+</div>
+<div id="footer">
+    <a href="http://www.scottmetoyer.com">Scott Metoyer 2013</a>
 </div>

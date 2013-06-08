@@ -16,6 +16,13 @@ namespace Reader.Web.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
+        }
+
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
