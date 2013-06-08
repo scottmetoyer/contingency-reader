@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -24,5 +25,19 @@ namespace Reader.Domain
         [DataMember]
         [Column]
         public string URL { get; set; }
+
+        [Column]
+        public Binary Favicon { get; set; }
+
+        [Column]
+        public string BlogURL { get; set; }
+
+        [Column]
+        public DateTime? LastRefresh { get; set; }
+
+        public Feed()
+        {
+            this.Favicon = new byte[0];
+        }
     }
 }

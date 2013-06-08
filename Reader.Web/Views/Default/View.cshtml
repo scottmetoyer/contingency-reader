@@ -79,7 +79,7 @@
     <a href="#" class="button" id="toggle-add">Add feed</a>
     <div id="add-feed" style="display: none;">
         <span class="mini">Paste the feed URL and click add:</span>
-        @using (Html.BeginForm("AddFeed", "Default"))
+        @using (Html.BeginForm("Subscribe", "Default"))
         {
             <input type="text" name="url" />
             <input type="submit" value="Add" />
@@ -92,7 +92,7 @@
                 <li class="@(feed.Selected == true ? "selected-feed" : "")">
                     <a href="@Url.Action("View", new { feed = feed.Feed.URL })">
                         <div class="favicon">
-                            <img height="16" width="16" src="@Url.Content("~/Images/rss_ico.png")" />
+                            <img height="16" width="16" src="@Url.Action("FeedImage", new { id = feed.Feed.FeedID })" />
                         </div>
                         <div class="name">@Server.UrlDecode(feed.Feed.DisplayName)</div>
                         <div class="unread-count">@(feed.UnreadCount == 0 ? "" : "(" + feed.UnreadCount.ToString() + ")")&nbsp;</div>

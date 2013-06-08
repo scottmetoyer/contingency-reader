@@ -278,6 +278,10 @@ a img
         float: left;
         margin-right: 4px;
         padding-top: 2px;
+        max-width: 180px;
+        max-height: 1.40em;
+        overflow: hidden;
+        line-height: 1.3em;
     }
 
     #feeds .unread-count

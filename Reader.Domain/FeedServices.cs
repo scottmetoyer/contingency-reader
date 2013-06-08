@@ -7,6 +7,8 @@ using System.Xml;
 using System.ServiceModel.Syndication;
 using System.Xml.Linq;
 using System.Web;
+using System.Net;
+using System.IO;
 
 namespace Reader.Domain
 {
@@ -44,26 +46,6 @@ namespace Reader.Domain
             }
 
             return valid;
-        }
-
-        public string GetDisplayName(string url)
-        {
-            string displayName = string.Empty;
-
-            try
-            {
-                XmlReader reader = XmlReader.Create(url);
-                Rss20FeedFormatter formatter = new Rss20FeedFormatter();
-                formatter.ReadFrom(reader);
-                reader.Close();
-                displayName = formatter.Feed.Title.Text;
-            }
-            catch
-            {
-                displayName = string.Empty;
-            }
-
-            return displayName;
         }
 
         public void Fetch(Feed feed)
@@ -154,6 +136,37 @@ namespace Reader.Domain
             }
 
             return nextItem;
+        }
+
+        public void FillFeed(Feed feed)
+        {
+            XmlReader reader = XmlReader.Create(feed.URL);
+            Rss20FeedFormatter formatter = new Rss20FeedFormatter();
+            formatter.ReadFrom(reader);
+            reader.Close();
+            feed.DisplayName = formatter.Feed.Title.Text;
+
+            var link = formatter.Feed.Links.FirstOrDefault(x => x.RelationshipType == "alternate");
+
+            if (link != null)
+            {
+                feed.BlogURL = link.GetAbsoluteUri().AbsoluteUri;
+
+                // Load the favicon
+                byte[] bytes = new byte[0];
+                var imageAddress = "http://" + link.Uri.Host + "/favicon.ico";
+
+                try
+                {
+                    WebClient client = new WebClient();
+                    MemoryStream stream = new MemoryStream(client.DownloadData(imageAddress));
+                    feed.Favicon = stream.ToArray();
+                }
+                catch
+                {
+                    // We'll let it pass if we can't find the image
+                }
+            }
         }
     }
 }

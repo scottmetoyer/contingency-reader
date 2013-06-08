@@ -120,6 +120,9 @@ CREATE TABLE [dbo].[Feeds](
 	[FeedID] [int] IDENTITY(1,1) NOT NULL,
 	[DisplayName] [nvarchar](250) NOT NULL,
 	[URL] [nvarchar](250) NOT NULL,
+	[BlogURL] NVARCHAR(250) NULL, 
+    [Favicon] IMAGE NULL,	
+	[LastRefresh] DATETIME NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[FeedID] ASC

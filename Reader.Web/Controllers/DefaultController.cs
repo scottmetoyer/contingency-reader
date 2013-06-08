@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -112,7 +113,7 @@ namespace Reader.Web.Controllers
                 var selectedFeed = _repository.Feeds.FirstOrDefault(x => x.URL == feed);
                 var feeds = _repository.Feeds.ToList();
                 model.Feeds = _builder.BuildFeedsViewModelList(feeds, selectedFeed);
-              
+
                 if (selectedFeed != null)
                 {
                     model.ChannelName = selectedFeed.DisplayName;
@@ -177,9 +178,23 @@ namespace Reader.Web.Controllers
             return View(model);
         }
 
+        public FileResult FeedImage(int id)
+        {
+            try
+            {
+                var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == id);
+                byte[] data = feed.Favicon.ToArray();
+                return File(data, "image/x-icon");
+            }
+            catch
+            {
+                return File(Server.MapPath("~/Images/rss_ico.png"), "image/png");
+            }
+        }
+
         [HttpPost]
         [ValidateInput(false)]
-        public ActionResult AddFeed(string url)
+        public ActionResult Subscribe(string url)
         {
             if (url.Trim() == string.Empty)
             {
@@ -193,9 +208,14 @@ namespace Reader.Web.Controllers
             {
                 try
                 {
-                    var feed = new Feed { FeedID = 0 };
-                    feed.URL = url;
-                    feed.DisplayName = _services.GetDisplayName(url);
+                    // Check for duplicates
+                    var feed = _repository.Feeds.FirstOrDefault(x => x.URL == url);
+                    if (feed == null)
+                    {
+                        feed = new Feed { FeedID = 0, URL = url };
+                    }
+
+                    _services.FillFeed(feed);
                     _repository.SaveFeed(feed);
 
                     TempData["Message"] = feed.DisplayName + " added";
