@@ -8,9 +8,11 @@ using System.Web.Http;
 using System.Xml.Serialization;
 using Reader.Domain;
 using Reader.Domain.Configuration;
+using Reader.Web.Helpers;
 
 namespace Reader.Web.Controllers
 {
+    [TokenAuthorize]
     public class FeedsController : ApiController
     {
         private FeedRepository _repository;

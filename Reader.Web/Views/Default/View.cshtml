@@ -26,10 +26,10 @@
 
                 if (imagePath.indexOf('star.png') >= 0) {
                     $(this).attr('src', '@Url.Content("~/Images/star_lit.png")');
-                    $.post('api/items/setStar', "=" + $(this).attr("alt"));
+                    $.post('@Url.Action("Star")', "id=" + $(this).attr("alt") + "&star=true");
                 } else {
                     $(this).attr('src', '@Url.Content("~/Images/star.png")');
-                    $.post('api/items/removeStar', "=" + $(this).attr("alt"));
+                    $.post('@Url.Action("Star")', "id=" + $(this).attr("alt") + "&star=false");
                 }
 
                 if ($(event.target).is('.star')) {
@@ -53,8 +53,8 @@
             // Post to the 'set read' web service
             if (item.children("input[name='is-read']").val() != "read") {
                 $.post(
-                    'api/items/read',
-                    "=" + item.children("input[name='item-id']").val(),
+                    '@Url.Action("Read")',
+                    "id=" + item.children("input[name='item-id']").val(),
                     function (data) {
                         // Set the item's hidden input read indicator
                         item.children("input[name='is-read']").val("read");

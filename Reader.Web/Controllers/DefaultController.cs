@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using Reader.Domain;
@@ -227,6 +229,66 @@ namespace Reader.Web.Controllers
             }
 
             return RedirectToAction("View");
+        }
+
+        [HttpPost]
+        public HttpResponseMessage Star(int id, bool star)
+        {
+            bool success = false;
+
+            try
+            {
+                var item = _repository.Items.FirstOrDefault(x => x.ItemID == id);
+                if (item != null)
+                {
+                    item.IsStarred = star;
+                    _repository.SaveItem(item);
+                    success = true;
+                }
+            }
+            catch
+            {
+                success = false;
+            }
+
+            if (success)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Accepted);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage Read(int id)
+        {
+            bool success = false;
+
+            try
+            {
+                var item = _repository.Items.FirstOrDefault(x => x.ItemID == id);
+                if (item != null)
+                {
+                    item.IsRead = true;
+                    _repository.SaveItem(item);
+                    success = true;
+                }
+            }
+            catch
+            {
+                success = false;
+            }
+
+            if (success)
+            {
+                return new HttpResponseMessage(HttpStatusCode.Accepted);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
         }
     }
 }

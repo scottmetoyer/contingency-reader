@@ -27,7 +27,6 @@ namespace Reader.Web.Controllers
         public ActionResult Login(string username, string password)
         {
             UserSettingsSection config = (UserSettingsSection)System.Configuration.ConfigurationManager.GetSection("userSettings");
-
             if (config == null)
             {
                 TempData["Error"] = "Configuration file not found. Did you rename Default.config to User.config?";

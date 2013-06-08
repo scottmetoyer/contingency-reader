@@ -17,12 +17,13 @@ namespace Reader.Fetcher
         static void Main(string[] args)
         {
             Console.WriteLine("Fetching list of feeds to update...");
-            Console.WriteLine("Done.");
             var client = new WebClient();
 
             try
             {
                 UserSettingsSection config = (UserSettingsSection)System.Configuration.ConfigurationManager.GetSection("userSettings");
+                client.Headers.Add(HttpRequestHeader.Authorization, config.AuthToken.Value);
+
                 string baseUrl = config.ServiceUrl.Value;
                 var json = client.DownloadData(baseUrl + "feeds");
 

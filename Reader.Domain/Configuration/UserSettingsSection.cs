@@ -10,6 +10,19 @@ namespace Reader.Domain.Configuration
 {
     public class UserSettingsSection : ConfigurationSection
     {
+        [ConfigurationProperty("authToken")]
+        public AuthTokenElement AuthToken
+        {
+            get
+            {
+                return (AuthTokenElement)this["authToken"];
+            }
+            set
+            {
+                this["authToken"] = value;
+            }
+        }
+
         [ConfigurationProperty("serviceUrl")]
         public ServiceUrlElement ServiceUrl
         {
@@ -95,6 +108,22 @@ namespace Reader.Domain.Configuration
         }
 
         public class ServiceUrlElement : ConfigurationElement
+        {
+            [ConfigurationProperty("value", IsRequired = true)]
+            public string Value
+            {
+                get
+                {
+                    return (string)this["value"];
+                }
+                set
+                {
+                    this["value"] = value;
+                }
+            }
+        }
+
+        public class AuthTokenElement : ConfigurationElement
         {
             [ConfigurationProperty("value", IsRequired = true)]
             public string Value
