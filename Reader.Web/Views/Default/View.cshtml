@@ -124,13 +124,13 @@
     {
         if (Model.BlogURL != string.Empty)
         {
-        <div class="feed-name"><a href="@Model.BlogURL">@Model.ChannelName</a></div>
+        <div class="feed-name"><a href="@Model.BlogURL">@Model.ChannelName</a><span class="light">@Model.LastRefresh</span></div>
         }
         else
         {
-        <div class="feed-name">@Model.ChannelName</div>
+        <div class="feed-name">@Model.ChannelName <span class="light">@Model.LastRefresh</span></div>
         }
-
+        
         if (Model.ChannelURL != "starred")
         {
             var selectedFeed = Model.Feeds.FirstOrDefault(x => x.Selected == true).Feed;       

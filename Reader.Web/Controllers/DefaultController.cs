@@ -100,6 +100,7 @@ namespace Reader.Web.Controllers
                 {
                     model.ChannelName = selectedFeed.DisplayName;
                     model.BlogURL = selectedFeed.BlogURL;
+                    model.LastRefresh = selectedFeed.LastRefresh.ToString();
 
                     try
                     {

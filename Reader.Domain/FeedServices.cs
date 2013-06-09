@@ -92,7 +92,6 @@ namespace Reader.Domain
                 }
 
                 item.Content = this.ScrubScripts(item.Content);
-
                 items.Add(item);
             }
 
@@ -105,12 +104,15 @@ namespace Reader.Domain
                     i.FetchDate = DateTime.Now;
 
                     // Don't save advertisements
-                    if (string.Compare(i.Title, "sponsored post", true) < 0)
+                    if (!i.Title.ToLower().Contains("sponsored post"))
                     {
                         _repository.SaveItem(i);
                     }
                 }
             }
+
+            feed.LastRefresh = DateTime.Now;
+            _repository.SaveFeed(feed);
         }
 
         public string ScrubScripts(string fragment)

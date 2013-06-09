@@ -192,6 +192,7 @@ textarea
         float: left;
         margin-left: 0;
         padding-left: 0;
+        text-align: left;
     }
 
         #feed-controls .feed-name a
@@ -205,6 +206,14 @@ textarea
                 text-decoration: none;
                 color: #000;
             }
+
+.light
+{
+    color: #C0C0C0;
+    font-weight: normal;
+    font-size: 12px;
+    margin-left: 8px;
+}
 
 .clear
 {

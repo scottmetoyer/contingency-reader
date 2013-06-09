@@ -26,7 +26,7 @@ namespace Reader.Domain
         [Column]
         public string URL { get; set; }
 
-        [Column]
+        [Column(UpdateCheck = UpdateCheck.Never)]
         public Binary Favicon { get; set; }
 
         [Column]
