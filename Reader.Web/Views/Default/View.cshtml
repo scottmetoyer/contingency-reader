@@ -43,7 +43,40 @@
             });
 
             $(".alert").delay(5000).fadeOut('slow');
+
+            // Keep loading new articles until we have everything or we've triggered the content area overflow
+            loadUntilPageFull();
         });
+
+        $.fn.hasOverflow = function () {
+            var $this = $(this);
+            var $children = $this.find('*');
+            var len = $children.length;
+
+            if (len) {
+                var maxWidth = 0;
+                var maxHeight = 0
+                $children.map(function () {
+                    maxWidth = Math.max(maxWidth, $(this).outerWidth(true));
+                    maxHeight = Math.max(maxHeight, $(this).outerHeight(true));
+                });
+
+                return maxWidth > $this.width() || maxHeight > $this.height();
+            }
+
+            return false;
+        };
+
+        function loadUntilPageFull() {
+            if (!($("#content").hasOverflow())) {
+                lastItemLink = $("div.item:last").find("a.jscroll-next:last");
+
+                if (lastItemLink) {
+                }
+            }
+            else {
+            }
+        }
 
         function selectItem(item) {
             // Side the active item border styling
