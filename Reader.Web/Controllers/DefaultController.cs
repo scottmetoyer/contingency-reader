@@ -168,6 +168,12 @@ namespace Reader.Web.Controllers
             {
                 var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == id);
                 byte[] data = feed.Favicon.ToArray();
+
+                if (data.Length == 0)
+                {
+                    return File(Server.MapPath("~/Images/rss_ico.png"), "image/png");
+                }
+
                 return File(data, "image/x-icon");
             }
             catch
