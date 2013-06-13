@@ -7,7 +7,7 @@ using Reader.Domain;
 
 namespace Reader.Web.Models
 {
-    public class ItemsViewModel
+    public class IndexViewModel
     {
         public string ChannelName { get; set; }
 
@@ -21,7 +21,7 @@ namespace Reader.Web.Models
 
         public List<ItemViewModel> Items { get; set; }
 
-        public ItemsViewModel()
+        public IndexViewModel()
         {
             this.Feeds = new List<FeedViewModel>();
             this.Items = new List<ItemViewModel>();

@@ -86,9 +86,9 @@ namespace Reader.Web.Controllers
             return RedirectToAction("View");
         }
 
-        public ActionResult View(string feed)
+        public ActionResult Index(string feed)
         {
-            var model = new ItemsViewModel();
+            var model = new IndexViewModel();
             model.ChannelURL = feed;
 
             try
@@ -107,12 +107,12 @@ namespace Reader.Web.Controllers
                     {
                         if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
                         {
-                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID && x.IsRead == false).OrderByDescending(x => x.ItemID).Take(3).ToList();
+                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID && x.IsRead == false).OrderByDescending(x => x.ItemID).Take(10).ToList();
                             model.Items = _builder.BuildItemsViewModelList(items, true);
                         }
                         else
                         {
-                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID).OrderByDescending(x => x.ItemID).Take(3).ToList();
+                            var items = _repository.Items.Where(x => x.FeedID == selectedFeed.FeedID).OrderByDescending(x => x.ItemID).Take(10).ToList();
                             model.Items = _builder.BuildItemsViewModelList(items, true);
                         }
                     }

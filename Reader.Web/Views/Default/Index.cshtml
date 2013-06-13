@@ -1,4 +1,4 @@
-﻿@model Reader.Web.Models.ItemsViewModel
+﻿@model Reader.Web.Models.IndexViewModel
 @using System.Data
 @{
     ViewBag.Title = "View";
@@ -13,14 +13,14 @@
                 $('#content').scrollTo(this);
                 selectItem($(this));
             });
-
+            
             // Intialize infinite scroll
             $('#content').jscroll({
                 padding: 100,
                 nextSelector: 'a.jscroll-next:last',
                 loadingHtml: '<img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Loading" />'
             });
-
+            
             // Initialize starring
             $('#content').on("click", ".star", function (event) {
                 var imagePath = $(this).attr('src');
@@ -44,39 +44,7 @@
             });
 
             $(".alert").delay(5000).fadeOut('slow');
-
-            // Keep loading new articles until we have everything or we've triggered the content area overflow
-            loadUntilPageFull();
         });
-
-        $.fn.hasOverflow = function () {
-            var $this = $(this);
-            var $children = $this.find('*');
-            var len = $children.length;
-
-            if (len) {
-                var maxWidth = 0;
-                var maxHeight = 0
-                $children.map(function () {
-                    maxWidth = Math.max(maxWidth, $(this).outerWidth(true));
-                    maxHeight = Math.max(maxHeight, $(this).outerHeight(true));
-                });
-
-                return maxWidth > $this.width() || maxHeight > $this.height();
-            }
-
-            return false;
-        };
-
-        function loadUntilPageFull() {
-            if (!($("#content").hasOverflow())) {
-                lastItemLink = $("div.jscroll-next-parent").find("a.jscroll-next:last");
-
-                if (lastItemLink.length != 0) {
-                    alert(lastItemLink);
-                }
-            }
-        }
 
         function selectItem(item) {
             // Side the active item border styling
@@ -123,7 +91,7 @@
             @foreach (var feed in Model.Feeds)
             {
                 <li class="@(feed.Selected == true ? "selected-feed" : "")">
-                    <a href="@Url.Action("View", new { feed = feed.Feed.URL })">
+                    <a href="@Url.Action("Index", new { feed = feed.Feed.URL })">
                         <div class="favicon">
                             @if (feed.Feed.Favicon.Length > 0)
                             {
