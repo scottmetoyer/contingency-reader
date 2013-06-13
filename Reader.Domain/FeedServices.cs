@@ -148,28 +148,29 @@ namespace Reader.Domain
             Rss20FeedFormatter formatter = new Rss20FeedFormatter();
             formatter.ReadFrom(reader);
             reader.Close();
-            feed.DisplayName = formatter.Feed.Title.Text;
-       
+
             var link = formatter.Feed.Links.FirstOrDefault(x => x.RelationshipType == "alternate");
+            feed.BlogURL = link.GetAbsoluteUri().AbsoluteUri;
+            feed.DisplayName = formatter.Feed.Title.Text;
 
-            if (link != null)
+            if (feed.DisplayName == string.Empty)
             {
-                feed.BlogURL = link.GetAbsoluteUri().AbsoluteUri;
+                feed.DisplayName = link.GetAbsoluteUri().Host;
+            }
 
-                // Load the favicon
-                byte[] bytes = new byte[0];
-                var imageAddress = "http://" + link.Uri.Host + "/favicon.ico";
+            // Load the favicon
+            byte[] bytes = new byte[0];
+            var imageAddress = "http://" + link.Uri.Host + "/favicon.ico";
 
-                try
-                {
-                    WebClient client = new WebClient();
-                    MemoryStream stream = new MemoryStream(client.DownloadData(imageAddress));
-                    feed.Favicon = stream.ToArray();
-                }
-                catch
-                {
-                    // We'll let it pass if we can't find the image
-                }
+            try
+            {
+                WebClient client = new WebClient();
+                MemoryStream stream = new MemoryStream(client.DownloadData(imageAddress));
+                feed.Favicon = stream.ToArray();
+            }
+            catch
+            {
+                // We'll let it pass if we can't find the image
             }
         }
     }
