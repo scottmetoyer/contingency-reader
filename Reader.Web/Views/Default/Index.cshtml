@@ -1,7 +1,7 @@
 ﻿@model Reader.Web.Models.IndexViewModel
 @using System.Data
 @{
-    ViewBag.Title = "View";
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section scripts
@@ -110,7 +110,7 @@
             }
             <li style="border-bottom: 1px solid #ebebeb; margin-top: 10px; margin-bottom: 10px;"></li>
             <li class="@(Model.ChannelURL == "starred" ? "selected-feed" : "")">
-                <a href="@Url.Action("View", new { feed = "starred" })">
+                <a href="@Url.Action("Index", new { feed = "starred" })">
                     <div class="favicon">
                         <img height="16" width="16" src="@Url.Content("~/Images/darkstar.png")" />
                     </div>
