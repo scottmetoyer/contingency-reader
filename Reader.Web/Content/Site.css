@@ -1,99 +1,83 @@
-﻿html, body
-{
+﻿html, body {
     height: 100%;
     min-height: 100%;
     margin: 0;
     padding: 0;
 }
 
-body
-{
+body {
     font-size: .85em;
     font-family: "Arial", Sans-Serif;
     color: #232323;
     background-color: #fff;
 }
 
-html *
-{
+html * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
 }
 
-header, footer, nav, section
-{
+header, footer, nav, section {
     display: block;
 }
 
 /* Styles for basic forms
 -----------------------------------------------------------*/
-fieldset
-{
+fieldset {
     border: 1px solid #ddd;
     padding: 0 1.4em 1.4em 1.4em;
     margin: 0 0 1.5em 0;
 }
 
-legend
-{
+legend {
     font-size: 1.2em;
     font-weight: bold;
 }
 
-textarea
-{
+textarea {
     min-height: 75px;
 }
 
-.editor-label
-{
+.editor-label {
     margin: 1em 0 0 0;
 }
 
-.editor-field
-{
+.editor-field {
     margin: 0.5em 0 0 0;
 }
 
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/
-.field-validation-error
-{
+.field-validation-error {
     color: #f00;
 }
 
-.field-validation-valid
-{
+.field-validation-valid {
     display: none;
 }
 
-.input-validation-error
-{
+.input-validation-error {
     border: 1px solid #f00;
     background-color: #fee;
 }
 
-.validation-summary-errors
-{
+.validation-summary-errors {
     font-weight: bold;
     color: #f00;
 }
 
-.validation-summary-valid
-{
+.validation-summary-valid {
     display: none;
 }
 
-.no-items
-{
+.no-items {
     color: #686868;
     text-align: left;
     margin-top: 20px;
 }
 
-#header
-{
+#header {
     height: 80px;
     width: 100%;
     margin: 0 0 .5em 0;
@@ -101,20 +85,17 @@ textarea
     border-bottom: solid 1px #686868;
 }
 
-    #header h1
-    {
+    #header h1 {
         margin: 0;
         padding: 20px;
     }
 
-        #header h1 a
-        {
+        #header h1 a {
             text-decoration: none;
             color: #000;
         }
 
-#nav
-{
+#nav {
     position: absolute;
     top: 90px;
     left: 6px;
@@ -127,8 +108,7 @@ textarea
     overflow-x: hidden;
 }
 
-#content
-{
+#content {
     overflow-y: scroll;
     text-align: left;
     position: fixed;
@@ -140,8 +120,7 @@ textarea
     border-bottom: solid 1px #ececec;
 }
 
-#footer
-{
+#footer {
     position: absolute;
     bottom: 6px;
     right: 6px;
@@ -150,19 +129,16 @@ textarea
     font-weight: bold;
 }
 
-    #footer a
-    {
+    #footer a {
         text-decoration: none;
         color: #686868;
     }
 
-        #footer a:visited
-        {
+        #footer a:visited {
             color: #686868;
         }
 
-#feed-controls
-{
+#feed-controls {
     position: fixed;
     padding: 0;
     left: 248px;
@@ -172,20 +148,17 @@ textarea
     height: 46px;
 }
 
-    #feed-controls div
-    {
+    #feed-controls div {
         float: right;
         margin-left: 5px;
         margin-top: 4px;
     }
 
-    #feed-controls input
-    {
+    #feed-controls input {
         height: 30px;
     }
 
-    #feed-controls .feed-name
-    {
+    #feed-controls .feed-name {
         margin-top: 10px;
         font-weight: bold;
         font-size: 15px;
@@ -195,33 +168,28 @@ textarea
         text-align: left;
     }
 
-        #feed-controls .feed-name a
-        {
+        #feed-controls .feed-name a {
             text-decoration: none;
             color: #000;
         }
 
-            #feed-controls .feed-name a:visited
-            {
+            #feed-controls .feed-name a:visited {
                 text-decoration: none;
                 color: #000;
             }
 
-.light
-{
+.light {
     color: #C0C0C0;
     font-weight: normal;
     font-size: 12px;
     margin-left: 8px;
 }
 
-.clear
-{
+.clear {
     clear: both;
 }
 
-.button
-{
+.button {
     padding: .4em 1em .4em 1em;
     background-color: #D34A32;
     text-decoration: none;
@@ -231,106 +199,94 @@ textarea
     cursor: pointer;
 }
 
-.gray
-{
+.gray {
     background-color: #BFBFBF;
     color: #EFEFEF;
     border: 0;
 }
 
-#add-feed
-{
+#add-feed {
     border: solid 1px #ececec;
     padding: .5em;
     margin-top: 8px;
     position: relative;
+    margin-right: 8px;
 }
 
-.mini
-{
+.mini {
     font-size: .85em;
     color: #808080;
 }
 
-a img
-{
+a img {
     border: none;
 }
 
-#feeds
-{
+#feeds {
     margin-top: 1em;
     height: auto;
     text-align: left;
 }
 
-    #feeds ul
-    {
+    #feeds ul {
         list-style-type: none;
         padding: 0;
     }
 
-    #feeds li
-    {
+    #feeds li {
         font-size: 13px;
         padding-top: 2px;
     }
 
-        #feeds li a
-        {
+        #feeds li a {
             width: 100%;
             display: block;
             color: #000;
         }
 
-        #feeds li div.favicon
-        {
+        #feeds li div.favicon {
             float: left;
             margin-right: 4px;
         }
 
-    #feeds img
-    {
+    #feeds img {
         margin-top: 1px;
     }
 
-    #feeds .name
-    {
+    #feeds .name {
         float: left;
         margin-right: 4px;
         padding-top: 2px;
-        max-width: 180px;
         max-height: 1.40em;
-        overflow: hidden;
         line-height: 1.3em;
+        max-width: 150px;
+        text-overflow: ellipsis;
+        white-space: nowrap; 
+        overflow: hidden; 
+        width: auto;
     }
 
-    #feeds .unread-count
-    {
+    #feeds .unread-count {
         color: #666;
         font-size: 11px;
         font-weight: normal;
         padding-top: 4px;
     }
 
-    #feeds li:hover
-    {
+    #feeds li:hover {
         background-color: #ececec;
     }
 
-    #feeds li.selected-feed a
-    {
+    #feeds li.selected-feed a {
         color: #D34A32;
         font-weight: bold;
     }
 
-    #feeds a
-    {
+    #feeds a {
         text-decoration: none;
     }
 
-.alert
-{
+.alert {
     font-weight: bold;
     font-size: 11px;
     padding: .5em;
@@ -343,24 +299,21 @@ a img
     height: auto;
 }
 
-.message
-{
+.message {
     border: solid 2px #005614;
     border-top: 0;
     background-color: #d9efd6;
     color: #005614;
 }
 
-.error
-{
+.error {
     border: solid 2px #4d0808;
     border-top: 0;
     background-color: #e6cdcd;
     color: #4d0808;
 }
 
-.item
-{
+.item {
     border: solid 1px #ececec;
     padding: .75em;
     margin-bottom: 2.0em;
@@ -368,45 +321,38 @@ a img
     overflow-x: hidden;
 }
 
-    .item .item-icons
-    {
+    .item .item-icons {
         float: right;
         text-align: right;
     }
 
-        .item .item-icons img
-        {
+        .item .item-icons img {
             float: right;
             margin-left: 10px;
         }
 
-    .item h3
-    {
+    .item h3 {
         margin-top: .5em;
         margin-bottom: 0;
         font-size: 1.3em;
         float: left;
     }
 
-        .item h3 a
-        {
+        .item h3 a {
             text-decoration: none;
             color: blue;
         }
 
-            .item h3 a:visited
-            {
+            .item h3 a:visited {
                 text-decoration: none;
                 color: blue;
             }
 
-.selected-item
-{
+.selected-item {
     border-left: solid 1px blue;
 }
 
-.date
-{
+.date {
     color: #808080;
     margin-bottom: 1.85em;
     margin-top: 0;

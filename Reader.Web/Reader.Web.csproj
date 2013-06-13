@@ -248,7 +248,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Default\View.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Service\Test.cshtml" />
     <Content Include="Views\Default\Item.cshtml" />
     <None Include="Web.Debug.config">
