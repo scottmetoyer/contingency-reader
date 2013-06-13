@@ -35,14 +35,14 @@ namespace Reader.Web.Controllers
             {
                 var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
                 Session["ViewMode"] = mode;
-                return RedirectToAction("View", new { feed = feed.URL });
+                return RedirectToAction("Index", new { feed = feed.URL });
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Error setting view mode: " + ex.Message.ToString();
             }
 
-            return RedirectToAction("View");
+            return RedirectToAction("Index");
         }
 
         public ActionResult MarkAllRead(int feedId)
@@ -59,14 +59,14 @@ namespace Reader.Web.Controllers
 
                 _repository.SaveChanges();
 
-                return RedirectToAction("View", new { feed = feed.URL });
+                return RedirectToAction("Index", new { feed = feed.URL });
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Error marking feed read: " + ex.Message.ToString();
             }
 
-            return RedirectToAction("View");
+            return RedirectToAction("Index");
         }
 
         public ActionResult Refresh(int feedId)
@@ -76,14 +76,14 @@ namespace Reader.Web.Controllers
                 var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == feedId);
                 _services.Fetch(feed);
                 TempData["Message"] = feed.DisplayName + " has been refreshed";
-                return RedirectToAction("View", new { feed = feed.URL });
+                return RedirectToAction("Index", new { feed = feed.URL });
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Error refreshing feed: " + ex.Message.ToString();
             }
 
-            return RedirectToAction("View");
+            return RedirectToAction("Index");
         }
 
         public ActionResult Index(string feed)
@@ -94,7 +94,7 @@ namespace Reader.Web.Controllers
             try
             {
                 var selectedFeed = _repository.Feeds.FirstOrDefault(x => x.URL == feed);
-                var feeds = _repository.Feeds.ToList();
+                var feeds = _repository.Feeds.OrderBy(x => x.DisplayName).ToList();
                 model.Feeds = _builder.BuildFeedsViewModelList(feeds, selectedFeed);
 
                 if (selectedFeed != null)
@@ -214,7 +214,7 @@ namespace Reader.Web.Controllers
                 }
             }
 
-            return RedirectToAction("View");
+            return RedirectToAction("Index");
         }
 
         public ActionResult Unsubscribe(int feedId)
@@ -227,14 +227,14 @@ namespace Reader.Web.Controllers
                 _repository.DeleteItems(items);
 
                 TempData["Message"] = "You have been unsubscribed from " + feed.DisplayName;
-                return RedirectToAction("View");
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Error unsubscribing from feed: " + ex.Message.ToString();
             }
 
-            return RedirectToAction("View");
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

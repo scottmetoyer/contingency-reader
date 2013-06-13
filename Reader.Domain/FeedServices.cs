@@ -31,11 +31,8 @@ namespace Reader.Domain
 
         public void Fetch(Feed feed)
         {
-            XmlReader reader = XmlReader.Create(HttpUtility.UrlDecode(feed.URL));
-            Rss20FeedFormatter formatter = new Rss20FeedFormatter();
-            formatter.ReadFrom(reader);
-            reader.Close();
-            var syndicationItems = formatter.Feed.Items.ToList();
+            var source = GetFeed(HttpUtility.UrlDecode(feed.URL));
+            var syndicationItems = source.Items.ToList();
 
             var items = new List<Item>();
             foreach (var i in syndicationItems)
@@ -65,27 +62,20 @@ namespace Reader.Domain
                     item.PublishDate = DateTime.Now;
                 }
 
-                if (i.Content != null)
+                // The content may be encoded. Go find the encoded content XML node and get the content.
+                StringBuilder sb = new StringBuilder();
+                foreach (SyndicationElementExtension extension in i.ElementExtensions)
                 {
-                    item.Content = i.Content.ToString();
-                }
-                else
-                {
-                    // The content may be encoded. Go find the encoded content XML node and get the content.
-                    StringBuilder sb = new StringBuilder();
-                    foreach (SyndicationElementExtension extension in i.ElementExtensions)
+                    XElement e = extension.GetObject<XElement>();
+                    if (e.Name.LocalName == "encoded" && e.Name.Namespace.ToString().Contains("content"))
                     {
-                        XElement e = extension.GetObject<XElement>();
-                        if (e.Name.LocalName == "encoded" && e.Name.Namespace.ToString().Contains("content"))
-                        {
-                            sb.Append(e.Value);
-                        }
+                        sb.Append(e.Value);
                     }
-
-                    item.Content = sb.ToString();
                 }
 
-                // Last resort, use the summary
+                item.Content = sb.ToString();
+
+                // Otherwise use the summary
                 if (item.Content == string.Empty && i.Summary != null)
                 {
                     item.Content = i.Summary.Text;
@@ -142,16 +132,39 @@ namespace Reader.Domain
             return nextItem;
         }
 
+        private SyndicationFeed GetFeed(string url)
+        {
+            using (XmlReader reader = XmlReader.Create(url))
+            {
+                Rss20FeedFormatter rss = new Rss20FeedFormatter();
+                if (rss.CanRead(reader))
+                {
+                    rss.ReadFrom(reader);
+                    return rss.Feed;
+                }
+
+                Atom10FeedFormatter atom = new Atom10FeedFormatter();
+                if (atom.CanRead(reader))
+                {
+                    atom.ReadFrom(reader);
+                    return atom.Feed;
+                }
+            }
+
+            return null;
+        }
+
         public void FillFeed(Feed feed)
         {
-            XmlReader reader = XmlReader.Create(feed.URL);
-            Rss20FeedFormatter formatter = new Rss20FeedFormatter();
-            formatter.ReadFrom(reader);
-            reader.Close();
+            SyndicationFeed source = GetFeed(feed.URL);
 
-            var link = formatter.Feed.Links.FirstOrDefault(x => x.RelationshipType == "alternate");
+            if (source == null)
+            {
+                throw new Exception("Not a valid Atom or RSS feed.");
+            }
+            var link = source.Links.FirstOrDefault(x => x.RelationshipType == "alternate");
             feed.BlogURL = link.GetAbsoluteUri().AbsoluteUri;
-            feed.DisplayName = formatter.Feed.Title.Text;
+            feed.DisplayName = source.Title.Text;
 
             if (feed.DisplayName == string.Empty)
             {

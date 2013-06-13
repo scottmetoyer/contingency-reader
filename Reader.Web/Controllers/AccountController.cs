@@ -35,7 +35,7 @@ namespace Reader.Web.Controllers
             if (username == config.Account.Username && password == config.Account.Password)
             {
                 FormsAuthentication.SetAuthCookie(username, true);
-                return RedirectToAction("View", "Default");
+                return RedirectToAction("Index", "Default");
             }
             else
             {
