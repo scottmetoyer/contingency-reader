@@ -69,12 +69,11 @@
 
         function loadUntilPageFull() {
             if (!($("#content").hasOverflow())) {
-                lastItemLink = $("div.item:last").find("a.jscroll-next:last");
+                lastItemLink = $("div.jscroll-next-parent").find("a.jscroll-next:last");
 
-                if (lastItemLink) {
+                if (lastItemLink.length != 0) {
+                    alert(lastItemLink);
                 }
-            }
-            else {
             }
         }
 
