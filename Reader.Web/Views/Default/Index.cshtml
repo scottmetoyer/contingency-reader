@@ -13,14 +13,14 @@
                 $('#content').scrollTo(this);
                 selectItem($(this));
             });
-            
+
             // Intialize infinite scroll
             $('#content').jscroll({
                 padding: 100,
                 nextSelector: 'a.jscroll-next:last',
                 loadingHtml: '<img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Loading" />'
             });
-            
+
             // Initialize starring
             $('#content').on("click", ".star", function (event) {
                 var imagePath = $(this).attr('src');
@@ -190,7 +190,10 @@
     @if (string.IsNullOrEmpty(Model.ChannelURL))
     {
         <div class="no-items">
-            Select a feed on the left and start reading!
+            <p>Thank you for trying Contingency Reader.</p>
+            <p>Feel free to <a href="mailto:scott@scottmetoyer.com">contact me with feature requests</a> or to <a href="https://github.com/scottmetoyer/contingency-reader/issues">report bugs</a>.</p>
+            <p>You may find some of my other projects on <a href="https://github.com/scottmetoyer">Github</a> useful. Also, <a href="http://scottmetoyer.com/">check out my blog</a> to see what else I'm working on.</p>
+            <p>Happy reading!</p>
         </div>
     }
     else
@@ -198,7 +201,7 @@
         if (Model.Items.Count == 0)
         {
         <div class="no-items">
-            Nothing more to read here...
+            Nothing more to read here. Click refresh to check for new articles.
             <br />
             <br />
             <img src="@Url.Content("~/Images/i-should-buy-a-boat-cat.jpg")" alt="boatcat"/>

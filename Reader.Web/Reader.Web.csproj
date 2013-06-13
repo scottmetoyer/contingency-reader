@@ -219,6 +219,7 @@
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\ajax-loader.gif" />
     <Content Include="Images\darkstar.png" />
+    <Content Include="Images\fist.png" />
     <Content Include="Images\i-should-buy-a-boat-cat.jpg" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\mail.png" />
@@ -264,7 +265,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\Icons\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

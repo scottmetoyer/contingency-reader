@@ -3,30 +3,89 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div style="padding: 1em;">
-    <form method="post" action="Login">
-        <h2>Login</h2>
-        <table>
-            <tr>
-                <td>Username :</td>
-                <td>
-                    <input name="Username" type="text" /></td>
-            </tr>
-            <tr>
-                <td>Password :</td>
-                <td>
-                    <input name="Password" type="password" /></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input id="btnSubmit" type="submit" value="Submit" /></td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center"></td>
-            </tr>
-        </table>
-    </form>
+<style type="text/css">
+    .centered {
+        width: 950px;
+        padding: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 40px;
+    }
+
+    .left {
+        float: left;
+        width: 420px;
+        padding: 10px;
+    }
+
+    .right {
+        margin-left: 460px;
+        text-align: left;
+        border: solid 1px #686868;
+        padding: 10px;
+        background-color: #F7F7F7;
+    }
+
+    table {
+        width: 240px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    td {
+        padding: 4px;
+    }
+
+    h3 {
+        border-bottom: solid 1px #ececec;
+        padding-bottom: 4px;
+    }
+</style>
+<div class="centered">
+    <div class="left">
+        <h3>Welcome to Contingengy Reader</h3>
+        <p>Contingency Reader is a self-hosted Google Reader replacement that puts you back in in control.</p>
+        <p>Eliminate your dependency on Google or any other third party. Instead, host your own full-featured, open source Atom and RSS feed reader.</p>
+        <p><strong>Take the power back.</strong></p>
+        <p>Contingency Reader is 100% free and open source (written in C# / .NET 4.5).</p>
+        <p>Features include:</p>
+        <ul>
+            <li>Article retention</li>
+            <li>Starring / favorites</li>
+            <li>Atom 1.0 and RSS 2.0 feed support</li>
+            <li>Read history</li>
+            <li>Inifinite scroll (dynamic content load)</li>
+        </ul>
+        <p><a href="https://github.com/scottmetoyer/contingency-reader">Download from Github</a></p>
+
+    </div>
+    <div class="right">
+        <form method="post" action="Login">
+            <h3>Log in to read your feeds</h3>
+            <table>
+                <tr>
+                    <td style="text-align: right;">Username</td>
+                    <td>
+                        <input name="Username" type="text" style="width: 120px" /></td>
+                </tr>
+                <tr>
+                    <td style="text-align: right;">Password</td>
+                    <td>
+                        <input name="Password" type="password" style="width: 120px" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <input id="btnSubmit" type="submit" value="Submit" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div style="clear: both;"></div>
 </div>
+
 <div id="footer">
     <a href="http://www.scottmetoyer.com">Scott Metoyer 2013</a>
 </div>
