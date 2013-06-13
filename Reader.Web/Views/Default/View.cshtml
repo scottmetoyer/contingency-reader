@@ -1,4 +1,5 @@
 ﻿@model Reader.Web.Models.ItemsViewModel
+@using System.Data
 @{
     ViewBag.Title = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -124,7 +125,14 @@
                 <li class="@(feed.Selected == true ? "selected-feed" : "")">
                     <a href="@Url.Action("View", new { feed = feed.Feed.URL })">
                         <div class="favicon">
-                            <img height="16" width="16" src="@Url.Action("FeedImage", new { id = feed.Feed.FeedID })" />
+                            @if (feed.Feed.Favicon.Length > 0)
+                            {
+                                <img height="16" width="16" src="@Url.Action("FeedImage", new { id = feed.Feed.FeedID })" />
+                            }
+                            else
+                            {
+                                <img height="16" width="16" src="@Url.Content("~/Images/rss_ico.png")" />
+                            }
                         </div>
                         <div class="name">@Server.UrlDecode(feed.Feed.DisplayName)</div>
                         <div class="unread-count">@(feed.UnreadCount == 0 ? "" : "(" + feed.UnreadCount.ToString() + ")")&nbsp;</div>
@@ -162,7 +170,7 @@
         {
         <div class="feed-name">@Model.ChannelName <span class="light">@Model.LastRefresh</span></div>
         }
-        
+
         if (Model.ChannelURL != "starred")
         {
             var selectedFeed = Model.Feeds.FirstOrDefault(x => x.Selected == true).Feed;       

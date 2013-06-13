@@ -10,6 +10,7 @@ using Reader.Domain;
 using Reader.Domain.Configuration;
 using Reader.Web.Helpers;
 using Reader.Web.Models;
+using System.Web.Caching;
 
 namespace Reader.Web.Controllers
 {
@@ -166,12 +167,13 @@ namespace Reader.Web.Controllers
         {
             try
             {
-                var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == id);
-                byte[] data = feed.Favicon.ToArray();
+                byte[] data = (byte[])HttpContext.Cache["image_" + id.ToString()];
 
-                if (data.Length == 0)
+                if (data == null)
                 {
-                    return File(Server.MapPath("~/Images/rss_ico.png"), "image/png");
+                    var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == id);
+                    data = feed.Favicon.ToArray();
+                    HttpContext.Cache["image_" + id.ToString()] = data;  
                 }
 
                 return File(data, "image/x-icon");
