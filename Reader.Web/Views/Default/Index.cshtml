@@ -8,17 +8,30 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            // Initialize click-to-scroll
-            $('#content').on("click", ".item", function (event) {
-                $('#content').scrollTo(this);
-                selectItem($(this));
+            // Initialize slim scroll
+            $('#feed-scroller').slimScroll({
+                height: 'auto'
             });
 
-            // Intialize infinite scroll
-            $('#content').jscroll({
-                padding: 100,
-                nextSelector: 'a.jscroll-next:last',
-                loadingHtml: '<img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Loading" />'
+            $('#content-scroller').slimScroll({
+                height: 'auto'
+            }).bind('slimscroll', function (e, pos) {
+                if (pos == "bottom") {
+                    var next = $('div.item:last').find('a.scroll-next');
+                    if (next.length > 0) {
+                        t = $('#content-scroller').scrollTop();
+
+                        $('<div>').load(next.attr('href'), function () {
+                            $(this).appendTo('#content-scroller');
+                            $('#content-scroller').slimScroll({ scrollTo: t });
+                        });
+                    }
+                }
+            });
+
+            // Initialize click-to-scroll
+            $('#content').on("click", ".item", function (event) {
+                selectItem($(this));
             });
 
             // Initialize starring
@@ -44,6 +57,8 @@
             });
 
             $(".alert").delay(5000).fadeOut('slow');
+
+            $('.slimScrollBar').fadeOut();
         });
 
         function selectItem(item) {
@@ -72,55 +87,56 @@
                             }
                         }
                     });
-            }
         }
+    }
     </script>
 }
 <div id="nav">
-    <a href="#" class="button" id="toggle-add">Add feed</a>
-    <div id="add-feed" style="display: none;">
-        <span class="mini">Paste the feed URL and click add:</span>
-        @using (Html.BeginForm("Subscribe", "Default"))
-        {
-            <input type="text" name="url" style="width: 122px" />
-            <input type="submit" value="Add" style="width: 44px; text-align: center;" />
-        }
-    </div>
-    <div id="feeds">
-        <ul>
-            @foreach (var feed in Model.Feeds)
+    <div class="scrollable" id="feed-scroller">
+        <a href="#" class="button" id="toggle-add">Add feed</a>
+        <div id="add-feed" style="display: none;">
+            <span class="mini">Paste the feed URL and click add:</span>
+            @using (Html.BeginForm("Subscribe", "Default"))
             {
-                <li class="@(feed.Selected == true ? "selected-feed" : "")">
-                    <a href="@Url.Action("Index", new { feed = feed.Feed.URL })">
-                        <div class="favicon">
-                            @if (feed.Feed.Favicon.Length > 0)
-                            {
-                                <img height="16" width="16" src="@Url.Action("FeedImage", new { id = feed.Feed.FeedID })" />
-                            }
-                            else
-                            {
-                                <img height="16" width="16" src="@Url.Content("~/Images/rss_ico.png")" />
-                            }
-                        </div>
-                        <div class="name">@Server.UrlDecode(feed.Feed.DisplayName)</div>
-                        <div class="unread-count">@(feed.UnreadCount == 0 ? "" : "(" + feed.UnreadCount.ToString() + ")")&nbsp;</div>
-                    </a>
-                    <div style="clear: both;"></div>
-                </li>
+                <input type="text" name="url" style="width: 122px" />
+                <input type="submit" value="Add" style="width: 44px; text-align: center;" />
             }
-            <li style="border-bottom: 1px solid #ebebeb; margin-top: 10px; margin-bottom: 10px;"></li>
-            <li class="@(Model.ChannelURL == "starred" ? "selected-feed" : "")">
-                <a href="@Url.Action("Index", new { feed = "starred" })">
-                    <div class="favicon">
-                        <img height="16" width="16" src="@Url.Content("~/Images/darkstar.png")" />
-                    </div>
-                    <div class="name">Starred Items</div>
-                    <div class="unread-count">&nbsp;</div>
-                </a>
-                <div style="clear: both;"></div>
-
-            </li>
-        </ul>
+        </div>
+        <div id="feeds">
+            <ul>
+                @foreach (var feed in Model.Feeds)
+                {
+                    <li class="@(feed.Selected == true ? "selected-feed" : "")">
+                        <a href="@Url.Action("Index", new { feed = feed.Feed.URL })">
+                            <div class="favicon">
+                                @if (feed.Feed.Favicon.Length > 0)
+                                {
+                                    <img height="16" width="16" src="@Url.Action("FeedImage", new { id = feed.Feed.FeedID })" />
+                                }
+                                else
+                                {
+                                    <img height="16" width="16" src="@Url.Content("~/Images/rss_ico.png")" />
+                                }
+                            </div>
+                            <div class="name">@Server.UrlDecode(feed.Feed.DisplayName)</div>
+                            <div class="unread-count">@(feed.UnreadCount == 0 ? "" : "(" + feed.UnreadCount.ToString() + ")")&nbsp;</div>
+                        </a>
+                        <div style="clear: both;"></div>
+                    </li>
+                }
+                <li style="border-bottom: 1px solid #ebebeb; margin-top: 10px; margin-bottom: 10px;"></li>
+                <li class="@(Model.ChannelURL == "starred" ? "selected-feed" : "")">
+                    <a href="@Url.Action("Index", new { feed = "starred" })">
+                        <div class="favicon">
+                            <img height="16" width="16" src="@Url.Content("~/Images/darkstar.png")" />
+                        </div>
+                        <div class="name">Starred Items</div>
+                        <div class="unread-count">&nbsp;</div>
+                    </a>
+                    <div style="clear: both; height: 40px;">&nbsp;</div>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <div id="feed-controls">
@@ -182,32 +198,34 @@
     }
 </div>
 <div id="content">
-    @foreach (var item in Model.Items)
-    {
-        @Html.Partial("Item", item)
-    }
-
-    @if (string.IsNullOrEmpty(Model.ChannelURL))
-    {
-        <div class="no-items">
-            <p>Thank you for using Contingency Reader.</p>
-            <p>Feel free to <a href="mailto:scott@scottmetoyer.com">contact me with feature requests</a> or to <a href="https://github.com/scottmetoyer/contingency-reader/issues">report bugs</a>.</p>
-            <p>You may find some of my other projects on <a href="https://github.com/scottmetoyer">Github</a> useful. Also, <a href="http://scottmetoyer.com/">check out my blog</a> to see what else I'm working on.</p>
-            <p>Happy reading!</p>
-        </div>
-    }
-    else
-    {
-        if (Model.Items.Count == 0)
+    <div class="scrollable" id="content-scroller">
+        @foreach (var item in Model.Items)
         {
-        <div class="no-items">
-            Nothing more to read here. Click refresh to check for new articles.
-            <br />
-            <br />
-            <img src="@Url.Content("~/Images/i-should-buy-a-boat-cat.jpg")" alt="boatcat"/>
-        </div>
+            @Html.Partial("Item", item)
         }
-    }
+
+        @if (string.IsNullOrEmpty(Model.ChannelURL))
+        {
+            <div class="no-items">
+                <p>Thank you for using Contingency Reader.</p>
+                <p>Feel free to <a href="mailto:scott@scottmetoyer.com">contact me with feature requests</a> or to <a href="https://github.com/scottmetoyer/contingency-reader/issues">report bugs</a>.</p>
+                <p>You may find some of my other projects on <a href="https://github.com/scottmetoyer">Github</a> useful. Also, <a href="http://scottmetoyer.com/">check out my blog</a> to see what else I'm working on.</p>
+                <p>Happy reading!</p>
+            </div>
+        }
+        else
+        {
+            if (Model.Items.Count == 0)
+            {
+            <div class="no-items">
+                Nothing more to read here. Click refresh to check for new articles.
+            <br />
+                <br />
+                <img src="@Url.Content("~/Images/i-should-buy-a-boat-cat.jpg")" alt="boatcat"/>
+            </div>
+            }
+        }
+    </div>
 </div>
 <div class="clear">
 </div>
