@@ -25,7 +25,8 @@ namespace Reader.Web
 
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
                       "~/Scripts/jquery.scrollTo-*",
-                       "~/Scripts/jquery.jscroll*"
+                       "~/Scripts/jquery.jscroll*",
+                       "~/Scripts/jquery.slimscroll*"
                       ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
