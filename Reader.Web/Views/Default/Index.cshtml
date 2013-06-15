@@ -19,11 +19,16 @@
                 if (pos == "bottom") {
                     var next = $('div.item:last').find('a.scroll-next');
                     if (next.length > 0) {
+                        // Save the current scroll position
                         t = $('#content-scroller').scrollTop();
 
+                        // Add the new content
                         $('<div>').load(next.attr('href'), function () {
                             $(this).appendTo('#content-scroller');
-                            $('#content-scroller').slimScroll({ scrollTo: t });
+
+                            setTimeout(function () {
+                                $('#content-scroller').slimScroll({ scrollTo: t });
+                            }, 100);
                         });
                     }
                 }

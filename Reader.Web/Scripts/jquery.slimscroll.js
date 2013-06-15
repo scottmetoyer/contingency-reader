@@ -6,7 +6,6 @@
  *
  */
 (function($) {
-
   jQuery.fn.extend({
     slimScroll: function(options) {
 
@@ -323,7 +322,7 @@
           // calculate actual scroll amount
           percentScroll = parseInt(bar.css('top')) / (me.outerHeight() - bar.outerHeight());
           delta = percentScroll * (me[0].scrollHeight - me.outerHeight());
-
+        
           if (isJump)
           {
             delta = y;
