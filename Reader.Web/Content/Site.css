@@ -108,6 +108,7 @@ textarea {
     width: 230px;
     overflow: hidden;
     padding-top: 6px;
+    outline: none;
 }
 
     #nav:hover

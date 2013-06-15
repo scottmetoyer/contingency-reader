@@ -8,6 +8,12 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
+            // Initialize feed nav focus
+            $('#nav').focusin(function () {
+                $('#nav').css({ overflow: 'auto'});
+            }).focusout(function () {
+                $('#nav').css({ overflow: 'hidden' });
+            });
             // Initialize infinite scroll
             $('#content').jscroll({
                 loadingHtml: '<img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Loading" />',
@@ -74,7 +80,7 @@
         }
     </script>
 }
-<div id="nav">
+<div id="nav" tabindex="1">
     <a href="#" class="button" id="toggle-add">Add feed</a>
     <div id="add-feed" style="display: none;">
         <span class="mini">Paste the feed URL and click add:</span>
