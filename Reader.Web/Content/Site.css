@@ -106,14 +106,8 @@ textarea {
     padding: 0;
     margin: 0;
     width: 230px;
-}
-
-.scrollable {
-    padding-top: 10px;
-}
-
-.scroll-next {
-    display: none;
+    overflow: auto;
+    padding-top: 6px;
 }
 
 #content {
@@ -125,12 +119,7 @@ textarea {
     bottom: 24px;
     width: auto;
     border-bottom: solid 1px #ececec;
-    overflow: hidden;
-}
-
-#content-scroller {
-    height: auto;
-    margin-bottom: 20px;
+    overflow: auto;
 }
 
 #footer {
@@ -244,6 +233,7 @@ a img {
     #feeds ul {
         list-style-type: none;
         padding: 0;
+        margin: 0;
     }
 
     #feeds li {

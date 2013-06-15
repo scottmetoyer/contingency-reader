@@ -22,9 +22,8 @@
     <div style="clear: both;"></div>
     <p class="date">@(Model.Item.PublishDate.HasValue ? Model.Item.PublishDate.Value.ToString() : string.Empty)</p>
     @Html.Raw(Model.Item.Content)
-
-    @if (Model.NextItemID > 0)
-    {
-        <a href="@Url.Action("Item", "Default", new { id = Model.NextItemID })" class="scroll-next"></a>
-    }
 </div>
+@if (Model.NextItemID > 0)
+{
+    <a href="@Url.Action("Item", "Default", new { id = Model.NextItemID })" class="jscroll-next"></a>
+}

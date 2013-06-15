@@ -24,7 +24,7 @@ namespace Reader.Web
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/plugins").Include(
-                       "~/Scripts/jquery.slimscroll*"
+                "~/Scripts/jquery.jscroll*"
                       ));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
