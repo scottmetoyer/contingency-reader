@@ -53,7 +53,7 @@ namespace Reader.Domain
                 item.IsRead = false;
                 item.Title = (i.Title != null) ? i.Title.Text : "No title";
 
-                if (i.PublishDate != null)
+                if (IsValidSqlDateTime(i.PublishDate))
                 {
                     item.PublishDate = i.PublishDate.DateTime;
                 }
@@ -185,6 +185,23 @@ namespace Reader.Domain
             {
                 // We'll let it pass if we can't find the image
             }
+        }
+
+        private bool IsValidSqlDateTime(DateTimeOffset value)
+        {
+            bool valid = false;
+            if (value == null) return valid;
+
+            // Check for SQL DATETIME validity
+            DateTimeOffset minDateTime = new DateTimeOffset(1753, 1, 1, 1, 1, 1, new TimeSpan(0));
+            DateTimeOffset maxDateTime = new DateTimeOffset(9999, 12, 31, 23, 59, 59, 997, new TimeSpan(0));
+
+            if (value >= minDateTime && value <= maxDateTime)
+            {
+                valid = true;
+            }
+
+            return valid;
         }
     }
 }
