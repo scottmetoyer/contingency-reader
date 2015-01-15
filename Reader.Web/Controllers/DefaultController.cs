@@ -122,19 +122,28 @@ namespace Reader.Web.Controllers
                     }
                 }
 
-                // Retrieve starred items
-                if (string.Compare(model.ChannelURL, "starred", true) >= 0)
+                if (!string.IsNullOrEmpty(model.ChannelURL))
                 {
-                    model.ChannelName = "Starred Items";
+                    // Retrieve starred items
+                    if (model.ChannelURL.ToLower() == "starred")
+                    {
+                        model.ChannelName = "Starred Items";
 
-                    try
-                    {
-                        var items = _repository.Items.Where(x => x.IsStarred == true).OrderByDescending(x => x.PublishDate).ToList();
-                        model.Items = _builder.BuildItemsViewModelList(items, false);
+                        try
+                        {
+                            var items = _repository.Items.Where(x => x.IsStarred == true).OrderByDescending(x => x.PublishDate).ToList();
+                            model.Items = _builder.BuildItemsViewModelList(items, false);
+                        }
+                        catch (Exception ex)
+                        {
+                            TempData["Error"] = "Error reading feed: " + ex.Message.ToString();
+                        }
                     }
-                    catch (Exception ex)
+
+                    // Show options screen
+                    if (model.ChannelURL.ToLower() == "options")
                     {
-                        TempData["Error"] = "Error reading feed: " + ex.Message.ToString();
+                        model.ChannelName = "Options";
                     }
                 }
             }
@@ -173,7 +182,7 @@ namespace Reader.Web.Controllers
                 {
                     var feed = _repository.Feeds.FirstOrDefault(x => x.FeedID == id);
                     data = feed.Favicon.ToArray();
-                    HttpContext.Cache["image_" + id.ToString()] = data;  
+                    HttpContext.Cache["image_" + id.ToString()] = data;
                 }
 
                 return File(data, "image/x-icon");
