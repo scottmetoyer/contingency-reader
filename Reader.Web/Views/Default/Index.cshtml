@@ -205,12 +205,11 @@
             <p>Happy reading!</p>
         </div>
     }
-
-    @{
-        
+    else
+    {
         if (Model.ChannelURL == "options")
         {
-        <p>Options go here</p>
+        @Html.Partial("Options")
         }
         else
         {

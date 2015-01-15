@@ -257,6 +257,7 @@
     </Content>
     <Content Include="Views\Service\Test.cshtml" />
     <Content Include="Views\Default\Item.cshtml" />
+    <Content Include="Views\Default\Options.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
