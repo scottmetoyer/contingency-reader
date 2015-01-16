@@ -14,12 +14,13 @@
             }).focusout(function () {
                 $('#nav').css({ overflow: 'hidden' });
             });
+
             // Initialize infinite scroll
             $('#content').jscroll({
                 loadingHtml: '<img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Loading" />',
                 nextSelector: 'a.jscroll-next:last'
             });
-
+       
             // Initialize click-to-select
             $('#content').on("click", ".item", function (event) {
                 selectItem($(this));
@@ -239,5 +240,5 @@
 <div class="clear">
 </div>
 <div id="footer">
-    <a href="http://www.scottmetoyer.com">Scott Metoyer 2013</a> | <a href="@Url.Action("Logout", "Account")">Log out</a>
+    <a href="http://www.scottmetoyer.com">Scott Metoyer 2013-2015</a> | <a href="@Url.Action("Logout", "Account")">Log out</a>
 </div>

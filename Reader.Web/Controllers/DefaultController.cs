@@ -158,15 +158,23 @@ namespace Reader.Web.Controllers
         public ActionResult Item(int id)
         {
             ItemViewModel model = new ItemViewModel();
-            model.Item = _repository.Items.FirstOrDefault(x => x.ItemID == id);
-            Item nextItem = null;
 
-            bool includeRead = Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items" ? false : true;
-            nextItem = _services.GetNextItem(includeRead, id, model.Item.FeedID);
-
-            if (nextItem != null)
+            if (id > 0)
             {
-                model.NextItemID = nextItem.ItemID;
+                model.Item = _repository.Items.FirstOrDefault(x => x.ItemID == id);
+                Item nextItem = null;
+
+                bool includeRead = Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items" ? false : true;
+                nextItem = _services.GetNextItem(includeRead, id, model.Item.FeedID);
+
+                if (nextItem != null)
+                {
+                    model.NextItemID = nextItem.ItemID;
+                }
+                else
+                {
+                    model.NextItemID = 0;
+                }
             }
 
             return View(model);

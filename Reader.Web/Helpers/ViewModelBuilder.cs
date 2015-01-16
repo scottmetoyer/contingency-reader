@@ -36,10 +36,10 @@ namespace Reader.Web.Helpers
                     {
                         itemViewModel.NextItemID = nextItem.ItemID;
                     }
-                }
-                else
-                {
-                    itemViewModel.NextItemID = 0;
+                    else
+                    {
+                        itemViewModel.NextItemID = 0;
+                    }
                 }
 
                 models.Add(itemViewModel);
