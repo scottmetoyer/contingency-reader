@@ -234,6 +234,13 @@ namespace Reader.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult SaveOptions(bool autoRefresh)
+        {
+            TempData["Message"] = "Options saved";
+            return RedirectToAction("Index", new { feed = "options" });
+        }
+
         public ActionResult Unsubscribe(int feedId)
         {
             try
