@@ -132,9 +132,13 @@
                     <div class="name">Options</div>
                     <div class="unread-count">&nbsp;</div>
                 </a>
-                <div style="clear: both; height: 40px;">&nbsp;</div>
+                <div style="clear: both;"></div>
             </li>
+
         </ul>
+        <div style="height: 40px;">
+            &nbsp;
+        </div>
     </div>
 </div>
 <div id="feed-controls">
@@ -146,51 +150,51 @@
     {
         if (Model.BlogURL != string.Empty)
         {
-        <div class="feed-name"><a href="@Model.BlogURL">@Model.ChannelName</a><span class="light">@Model.LastRefresh</span></div>
+            <div class="feed-name"><a href="@Model.BlogURL">@Model.ChannelName</a><span class="light">@Model.LastRefresh</span></div>
         }
         else
         {
-        <div class="feed-name">@Model.ChannelName <span class="light">@Model.LastRefresh</span></div>
+            <div class="feed-name">@Model.ChannelName <span class="light">@Model.LastRefresh</span></div>
         }
 
         if (Model.ChannelURL != "starred" && Model.ChannelURL != "options")
         {
-            var selectedFeed = Model.Feeds.FirstOrDefault(x => x.Selected == true).Feed;       
-        <div>
-            @using (Html.BeginForm("Refresh", "Default"))
-            {
-                <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
-                <input type="submit" class="button gray" value="Refresh" name="refresh-button" />
-            }
-        </div>
-        <div>
-            @using (Html.BeginForm("MarkAllRead", "Default"))
-            {
-                <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
-                <input type="submit" class="button gray" value="Mark All Read" name="markread-button" onclick="return confirm('Are you sure you want to mark all items read in this feed?')" />
-            }
-        </div>
-        <div>
-            @using (Html.BeginForm("Unsubscribe", "Default"))
-            {
-                <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
-                <input type="submit" class="button gray" value="Unsubscribe" name="unsubscribe-button" onclick="return confirm('Are you sure you want to unsubscribe from this feed?')" />
-            }
-        </div>
-        <div>
-            @using (Html.BeginForm("SetViewMode", "Default"))
-            {
-                <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
-                if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
+            var selectedFeed = Model.Feeds.FirstOrDefault(x => x.Selected == true).Feed;
+            <div>
+                @using (Html.BeginForm("Refresh", "Default"))
                 {
-                <input type="submit" class="button gray" value="Show All Items" name="mode" />
+                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
+                    <input type="submit" class="button gray" value="Refresh" name="refresh-button" />
                 }
-                else
+            </div>
+            <div>
+                @using (Html.BeginForm("MarkAllRead", "Default"))
                 {
-                <input type="submit" class="button gray" value="Show Unread Items" name="mode" />
+                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
+                    <input type="submit" class="button gray" value="Mark All Read" name="markread-button" onclick="return confirm('Are you sure you want to mark all items read in this feed?')" />
                 }
-            }
-        </div>
+            </div>
+            <div>
+                @using (Html.BeginForm("Unsubscribe", "Default"))
+                {
+                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
+                    <input type="submit" class="button gray" value="Unsubscribe" name="unsubscribe-button" onclick="return confirm('Are you sure you want to unsubscribe from this feed?')" />
+                }
+            </div>
+            <div>
+                @using (Html.BeginForm("SetViewMode", "Default"))
+                {
+                    <input type="hidden" name="feedid" value="@selectedFeed.FeedID" />
+                    if (Session["ViewMode"] == null || Session["ViewMode"].ToString() == "Show Unread Items")
+                    {
+                        <input type="submit" class="button gray" value="Show All Items" name="mode" />
+                    }
+                    else
+                    {
+                        <input type="submit" class="button gray" value="Show Unread Items" name="mode" />
+                    }
+                }
+            </div>
         }
         <div style="clear: both;"></div>
     }
@@ -209,24 +213,24 @@
     {
         if (Model.ChannelURL == "options")
         {
-        @Html.Partial("Options")
+            @Html.Partial("Options")
         }
         else
         {
             if (Model.Items.Count == 0)
             {
-        <div class="no-items">
-            Nothing more to read here. Click refresh to check for new articles.
-            <br />
-            <br />
-            <img src="@Url.Content("~/Images/i-should-buy-a-boat-cat.jpg")" alt="boatcat"/>
-        </div>
+                <div class="no-items">
+                    Nothing more to read here. Click refresh to check for new articles.
+                    <br />
+                    <br />
+                    <img src="@Url.Content("~/Images/i-should-buy-a-boat-cat.jpg")" alt="boatcat" />
+                </div>
             }
             else
             {
                 foreach (var item in Model.Items)
                 {
-        @Html.Partial("Item", item)
+                    @Html.Partial("Item", item)
                 }
             }
         }

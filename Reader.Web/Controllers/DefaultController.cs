@@ -199,7 +199,7 @@ namespace Reader.Web.Controllers
         {
             if (url.Trim() == string.Empty)
             {
-                TempData["Error"] = "URL is required to add a feed.";
+                TempData["Error"] = "URL is required to add a feed";
             }
             else
             {
@@ -304,6 +304,21 @@ namespace Reader.Web.Controllers
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
+        }
+
+        public ActionResult Purge()
+        {
+            try
+            {
+                _repository.PurgeItems();
+                TempData["Message"] = "Post data has been cleared";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error clearing post data: " + ex.Message.ToString();
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

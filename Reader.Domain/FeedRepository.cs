@@ -42,7 +42,7 @@ namespace Reader.Domain
             _context.SubmitChanges();
         }
 
-        public void SaveItem(Item item) 
+        public void SaveItem(Item item)
         {
             if (item.ItemID == 0)
             {
@@ -62,6 +62,11 @@ namespace Reader.Domain
         {
             _itemTable.DeleteAllOnSubmit(items);
             _context.SubmitChanges();
+        }
+
+        public void PurgeItems()
+        {
+            _context.ExecuteCommand("DELETE FROM Items WHERE IsStarred = 0");
         }
 
         public void SaveChanges()

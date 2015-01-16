@@ -111,8 +111,7 @@ textarea {
     outline: none;
 }
 
-    #nav:hover
-    {
+    #nav:hover {
         overflow-y: auto;
     }
 
@@ -366,4 +365,9 @@ a img {
     margin-bottom: 1.85em;
     margin-top: 0;
     font-size: .85em;
+}
+
+.option {
+    padding: 10px;
+    border-bottom: solid 1px #ececec;
 }
