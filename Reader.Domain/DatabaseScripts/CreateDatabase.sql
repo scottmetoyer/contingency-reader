@@ -160,3 +160,21 @@ PRIMARY KEY CLUSTERED
 
 GO
 
+/****** Object:  Table [dbo].[Feeds]    Script Date: 1/16/2015 11:49:00 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Options](
+	[OptionID] [int] IDENTITY(1,1) NOT NULL,
+	[Key] [nvarchar](50) NULL,
+	[Value] [nvarchar](max) NULL
+PRIMARY KEY CLUSTERED 
+(
+	[OptionID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+)
+
+GO

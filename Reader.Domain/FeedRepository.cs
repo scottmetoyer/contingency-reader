@@ -14,6 +14,12 @@ namespace Reader.Domain
         private DataContext _context;
         private Table<Feed> _feedTable;
         private Table<Item> _itemTable;
+        private Table<Option> _optionTable;
+
+        public IQueryable<Option> Options
+        {
+            get { return _optionTable; }
+        }
 
         public IQueryable<Feed> Feeds
         {
@@ -30,6 +36,17 @@ namespace Reader.Domain
             _context = new DataContext(connectionString);
             _feedTable = _context.GetTable<Feed>();
             _itemTable = _context.GetTable<Item>();
+            _optionTable = _context.GetTable<Option>();
+        }
+
+        public void SaveOption(Option option)
+        {
+            if (option.OptionID == 0)
+            {
+                _optionTable.InsertOnSubmit(option);
+            }
+
+            _context.SubmitChanges();
         }
 
         public void SaveFeed(Feed feed)
