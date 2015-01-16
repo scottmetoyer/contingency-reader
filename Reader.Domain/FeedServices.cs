@@ -82,6 +82,7 @@ namespace Reader.Domain
                 }
 
                 item.Content = this.ScrubScripts(item.Content);
+
                 items.Add(item);
             }
 

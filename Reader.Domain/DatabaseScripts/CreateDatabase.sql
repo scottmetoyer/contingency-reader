@@ -118,9 +118,9 @@ GO
 
 CREATE TABLE [dbo].[Feeds](
 	[FeedID] [int] IDENTITY(1,1) NOT NULL,
-	[DisplayName] [nvarchar](250) NOT NULL,
-	[URL] [nvarchar](250) NOT NULL,
-	[BlogURL] NVARCHAR(250) NULL, 
+	[DisplayName] [nvarchar](MAX) NOT NULL,
+	[URL] [nvarchar](MAX) NOT NULL,
+	[BlogURL] NVARCHAR(MAX) NULL, 
     [Favicon] IMAGE NULL,	
 	[LastRefresh] DATETIME NULL,
 PRIMARY KEY CLUSTERED 
@@ -148,7 +148,7 @@ CREATE TABLE [dbo].[Items](
 	[Title] [nvarchar](max) NOT NULL,
 	[PublishDate] [datetime] NULL,
 	[Content] [nvarchar](max) NULL,
-	[Url] [nvarchar](250) NOT NULL,
+	[Url] [nvarchar](MAX) NOT NULL,
 	[IsRead] [bit] NOT NULL,
 	[isStarred] [bit] NOT NULL,
 	[FetchDate] DATETIME NOT NULL, 
