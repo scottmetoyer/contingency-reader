@@ -20,7 +20,7 @@
                 loadingHtml: '<img src="@Url.Content("~/Images/ajax-loader.gif")" alt="Loading" />',
                 nextSelector: 'a.jscroll-next:last'
             });
-       
+
             // Initialize click-to-select
             $('#content').on("click", ".item", function (event) {
                 selectItem($(this));
@@ -125,8 +125,8 @@
                 <div style="clear: both;"></div>
             </li>
 
-            <li class="@(Model.ChannelURL == "options" ? "selected-feed" : "")">
-                <a href="@Url.Action("Index", new { feed = "options" })">
+            <li>
+                <a href="@Url.Action("Index", "Options")">
                     <div class="favicon">
                         <img height="16" width="16" src="@Url.Content("~/Images/19-gear-icon.png")" />
                     </div>

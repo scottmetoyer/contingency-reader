@@ -1,0 +1,110 @@
+﻿@model Reader.Web.Models.OptionsViewModel
+@using System.Data
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Initialize feed nav focus
+            $('#nav').focusin(function () {
+                $('#nav').css({ overflow: 'auto' });
+            }).focusout(function () {
+                $('#nav').css({ overflow: 'hidden' });
+            });
+
+            $("#toggle-add").click(function () {
+                $('#add-feed').toggle('fast');
+            });
+
+            $(".alert").delay(5000).fadeOut('slow');
+        });
+    </script>
+}
+<div id="nav" tabindex="1">
+    <a href="#" class="button" id="toggle-add">Add feed</a>
+    <div id="add-feed" style="display: none;">
+        <span class="mini">Paste the feed URL and click add:</span>
+        @using (Html.BeginForm("Subscribe", "Default"))
+        {
+            <input type="text" name="url" style="width: 122px" />
+            <input type="submit" value="Add" style="width: 44px; text-align: center;" />
+        }
+    </div>
+    <div id="feeds">
+        <ul>
+            @foreach (var feed in Model.Feeds)
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Default", new { feed = feed.Feed.URL })">
+                        <div class="favicon">
+                            @if (feed.Feed.Favicon.Length > 0)
+                            {
+                                <img height="16" width="16" src="@Url.Action("FeedImage", "Default", new { id = feed.Feed.FeedID })" />
+                            }
+                            else
+                            {
+                                <img height="16" width="16" src="@Url.Content("~/Images/rss_ico.png")" />
+                            }
+                        </div>
+                        <div class="name">@Server.UrlDecode(feed.Feed.DisplayName)</div>
+                        <div class="unread-count">@(feed.UnreadCount == 0 ? "" : "(" + feed.UnreadCount.ToString() + ")")&nbsp;</div>
+                    </a>
+                    <div style="clear: both;"></div>
+                </li>
+            }
+            <li style="border-bottom: 1px solid #ebebeb; margin-top: 10px; margin-bottom: 10px;"></li>
+            <li>
+                <a href="@Url.Action("Index", "Default", new { feed = "starred" })">
+                    <div class="favicon">
+                        <img height="16" width="16" src="@Url.Content("~/Images/darkstar.png")" />
+                    </div>
+                    <div class="name">Starred Items</div>
+                    <div class="unread-count">&nbsp;</div>
+                </a>
+                <div style="clear: both;"></div>
+            </li>
+
+            <li class="selected-feed">
+                <a href="@Url.Action("Index", "Options")">
+                    <div class="favicon">
+                        <img height="16" width="16" src="@Url.Content("~/Images/19-gear-icon.png")" />
+                    </div>
+                    <div class="name">Options</div>
+                    <div class="unread-count">&nbsp;</div>
+                </a>
+                <div style="clear: both;"></div>
+            </li>
+
+        </ul>
+        <div style="height: 40px;">
+            &nbsp;
+        </div>
+    </div>
+</div>
+<div id="feed-controls">
+    <div class="feed-name">Options and Tools</div>
+</div>
+<div id="content">
+    <div class="option">
+        <p><a href="@Url.Action("Purge")">Clear stored posts</a></p>
+        <p>Clear all stored post data (read and unread items). Your starred items are saved and will not be cleared. Use this function to clean up the Contingency Reader database every once in a while.</p>
+    </div>
+    @using (Html.BeginForm("Save", "Options"))
+    {
+        <div class="option">
+            @Html.CheckBoxFor(x => x.AutoRefresh) <label for="autoRefresh">Auto-refresh feeds on open</label>
+            <p>Automatically refresh posts when you open a feed.</p>
+        </div>
+        <div class="option" style="border: none;">
+            <input type="submit" value="Save Options" />
+        </div>
+    }
+</div>
+<div class="clear">
+</div>
+<div id="footer">
+    <a href="http://www.scottmetoyer.com">Scott Metoyer 2013-2015</a> | <a href="@Url.Action("Logout", "Account")">Log out</a>
+</div>

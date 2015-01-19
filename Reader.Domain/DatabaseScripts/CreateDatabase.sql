@@ -178,3 +178,6 @@ PRIMARY KEY CLUSTERED
 )
 
 GO
+
+INSERT INTO Options ([Key], [Value]) VALUES ('AutoRefresh', 'True')
+GO

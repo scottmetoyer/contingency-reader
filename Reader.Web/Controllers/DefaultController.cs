@@ -234,13 +234,6 @@ namespace Reader.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public ActionResult SaveOptions(bool autoRefresh)
-        {
-            TempData["Message"] = "Options saved";
-            return RedirectToAction("Index", new { feed = "options" });
-        }
-
         public ActionResult Unsubscribe(int feedId)
         {
             try
@@ -319,21 +312,6 @@ namespace Reader.Web.Controllers
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
             }
-        }
-
-        public ActionResult Purge()
-        {
-            try
-            {
-                _repository.PurgeItems();
-                TempData["Message"] = "Post data has been cleared";
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Error clearing post data: " + ex.Message.ToString();
-            }
-
-            return RedirectToAction("Index");
         }
     }
 }

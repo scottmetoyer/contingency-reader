@@ -67,5 +67,21 @@ namespace Reader.Web.Helpers
 
             return models;
         }
+
+        public OptionsViewModel BuildOptionsViewModel()
+        {
+            OptionsViewModel model = new OptionsViewModel();
+            List<Option> options = _repository.Options.ToList();
+
+            bool autoRefresh = false;
+            Boolean.TryParse(options.FirstOrDefault(x => x.Key == "AutoRefresh").Value, out autoRefresh);
+            model.AutoRefresh = autoRefresh;
+
+            var feeds = _repository.Feeds.OrderBy(x => x.DisplayName).ToList();
+            model.Feeds = this.BuildFeedsViewModelList(feeds, null);
+            model.ChannelName = "Options";
+
+            return model;
+        }
     }
 }
