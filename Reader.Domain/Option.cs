@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Reader.Domain
 {
+    [Table(Name = "Options")]
     public class Option
     {
         [DataMember]
