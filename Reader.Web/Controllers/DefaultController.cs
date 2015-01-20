@@ -94,14 +94,19 @@ namespace Reader.Web.Controllers
             try
             {
                 var selectedFeed = _repository.Feeds.FirstOrDefault(x => x.URL == feed);
-                var feeds = _repository.Feeds.OrderBy(x => x.DisplayName).ToList();
-                model.Feeds = _builder.BuildFeedsViewModelList(feeds, selectedFeed);
-
+               
                 if (selectedFeed != null)
                 {
                     model.ChannelName = selectedFeed.DisplayName;
                     model.BlogURL = selectedFeed.BlogURL;
                     model.LastRefresh = selectedFeed.LastRefresh.ToString();
+
+                    // Refresh the feed if the option is set
+                    if (_services.GetOption("AutoRefresh").Value.ToLower() == "true")
+                    {
+                        _services.Fetch(selectedFeed);
+                        TempData["Message"] = selectedFeed.DisplayName + " has been refreshed";
+                    }
 
                     try
                     {
@@ -146,6 +151,10 @@ namespace Reader.Web.Controllers
                         model.ChannelName = "Options";
                     }
                 }
+
+                // Build the feeds sidebar list
+                var feeds = _repository.Feeds.OrderBy(x => x.DisplayName).ToList();
+                model.Feeds = _builder.BuildFeedsViewModelList(feeds, selectedFeed);
             }
             catch (Exception ex)
             {

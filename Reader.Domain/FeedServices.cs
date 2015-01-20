@@ -29,6 +29,18 @@ namespace Reader.Domain
             _repository = repository;
         }
 
+        public Option GetOption(string key)
+        {
+            var option = _repository.Options.FirstOrDefault(x => x.Key == key);
+
+            if (option == null)
+            {
+                option = new Option() { Key = key, Value = string.Empty };
+            }
+
+            return option;
+        }
+
         public void Fetch(Feed feed)
         {
             var source = GetFeed(HttpUtility.UrlDecode(feed.URL));
